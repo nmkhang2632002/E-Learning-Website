@@ -1,11 +1,37 @@
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
-import { useAuth0 } from "@auth0/auth0-react";
-import Spinner from "./Spinner";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { doLogoutAction } from '../../redux/slice/slice';
 
 export default function Navbar() {
-  const { user, isAuthenticated, isLoading, logout, loginWithRedirect } =
-    useAuth0();
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // set biến 'account' chứa all
+  const account = useSelector(state => state?.account);
+
+  // console.log("account", account);
+
+  // set biến 'userSelector' chứa thông tin đã đăng nhập
+  const accountInfo = useSelector(state => state?.account?.user?.account?.user);
+
+  // // check biến 'account' đã authenticated là TRUE chưa.
+  const isAuthenticated = account.isAuthenticated;
+
+  // console.log("accountInfo", accountInfo);
+
+
+  // Function xử lý thoát đăng nhập
+  const handleLogOut = () => {
+
+    // console.log('Button Logout clicked')
+
+    localStorage.removeItem('Token');
+    dispatch(doLogoutAction());
+    navigate('/');
+  }
+
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-white navbar-light shadow sticky-top p-0">
@@ -14,7 +40,7 @@ export default function Navbar() {
           className="navbar-brand d-flex align-items-center px-4 px-lg-5"
         >
           <h2 className="m-0 text-primary">
-            <i className="fa fa-book me-3"></i>eLEARNING
+            <i className="fa fa-book me-3"></i>EDY-LEARNING
           </h2>
         </Link>
         <button
@@ -90,26 +116,23 @@ export default function Navbar() {
             </NavLink>
           </div>
 
-          {isLoading && <Spinner />}
-
-          {isAuthenticated && (
-            <NavLink
-              to="/profile"
-              className="nav-item nav-link"
-              activeClassName="active"
-            >
-              {user.name}
-            </NavLink>
-          )}
           {isAuthenticated ? (
-            <button
-              className="btn btn-primary py-4 px-lg-5 d-none d-lg-block"
-              onClick={() =>
-                logout({ logoutParams: { returnTo: window.location.origin } })
-              }
-            >
-              Log out
-            </button>
+            <>
+              <NavLink
+                to="/profile"
+                className="nav-item nav-link"
+                activeClassName="active"
+              >
+                Welcome, {accountInfo.username}
+              </NavLink>
+
+              <button
+                className="btn btn-primary py-4 px-lg-5 d-none d-lg-block"
+                onClick={() => handleLogOut()}
+              >
+                Logout
+              </button>
+            </>
           ) : (
             <>
               <Link to="/signin">

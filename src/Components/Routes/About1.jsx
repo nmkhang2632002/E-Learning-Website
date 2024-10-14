@@ -11,14 +11,14 @@ import Spinner from '../Pages/Spinner'
 export default function About1() {
   return (
     <>
-    <Spinner/>
-    <Navbar/>
-    <Header name="About"/>
-    <About/>
-    <Service/>
-    <Team/>
-    <Testimonial/>
-    <Footer/>
+      <Spinner />
+      <Navbar />
+      <Header name="About" />
+      <About />
+      <Service />
+      <Team />
+      <Testimonial />
+      <Footer />
     </>
   )
 }

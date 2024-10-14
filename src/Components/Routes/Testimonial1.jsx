@@ -5,14 +5,14 @@ import Footer from '../Pages/Footer'
 import Testimonial from '../Pages/Testimonial'
 import Spinner from '../Pages/Spinner'
 
-export default function () {
+export default function Testimonial1() {
   return (
     <>
-    <Spinner/>
-    <Navbar/>
-    <Header name="Testimonial"/>
-    <Testimonial/>
-    <Footer/>
+      <Spinner />
+      <Navbar />
+      <Header name="Testimonial" />
+      <Testimonial />
+      <Footer />
     </>
   )
 }

@@ -8,11 +8,11 @@ import Spinner from '../Pages/Spinner'
 export default function Courses1() {
   return (
     <>
-    <Spinner/>
-    <Navbar/>
-    <Header name="Courses"/>
-    <Cources/>
-    <Footer/>
+      <Spinner/>
+      <Navbar />
+      <Header name="Courses" />
+      <Cources />
+      <Footer />
     </>
   )
 }

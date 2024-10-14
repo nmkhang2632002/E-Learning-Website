@@ -76,7 +76,7 @@ export default function FeedbackAll() {
               <input
                 type="text"
                 name="image"
-                class="form-control"
+                className="form-control"
                 id="floatingInput"
                 placeholder="Enter Your Image URL"
               />
@@ -121,7 +121,7 @@ export default function FeedbackAll() {
               href={`https://elearning-backend-lfxb.onrender.com/feedback/${feedback._id}`}
             >
               <span
-                class="material-symbols-outlined position-absolute top-0 end-0"
+                className="material-symbols-outlined position-absolute top-0 end-0"
                 style={{ cursor: "pointer" }}
               >
                 close
