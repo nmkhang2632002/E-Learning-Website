@@ -14,27 +14,23 @@ import {
   MDBIcon,
 } from "mdb-react-ui-kit";
 import { Button, Form, Input, notification } from "antd";
+import { useSelector } from "react-redux";
 
 export default function Profile() {
   const [form] = Form.useForm();
-  const [accountInfo, setAccountInfo] = useState({});
+  const accountInfo = useSelector((state) => state?.account?.user?.user);
 
   useEffect(() => {
-    // Load user data from localStorage
-    const storedUser = JSON.parse(localStorage.getItem("Accounts"))?.find(
-      (account) => account.isAuthenticated
-    );
-    if (storedUser) {
-      setAccountInfo(storedUser);
+    if (accountInfo) {
       form.setFieldsValue({
-        username: storedUser.username,
-        email: storedUser.email,
-        phoneNumber: storedUser.phoneNumber,
-        dateOfBirth: storedUser.dateOfBirth,
-        role: storedUser.role,
+        username: accountInfo.username,
+        email: accountInfo.email,
+        phoneNumber: accountInfo.phoneNumber,
+        dateOfBirth: accountInfo.dateOfBirth,
+        role: accountInfo.role,
       });
     }
-  }, [form]);
+  }, [form, accountInfo]);
 
   const onFinish = (values) => {
     // Update user data in localStorage
@@ -79,7 +75,9 @@ export default function Profile() {
                       style={{ width: "80px" }}
                       fluid
                     />
-                    <MDBTypography tag="h5" style={{ fontStyle: 'italic' }}>{accountInfo.username}</MDBTypography>
+                    <MDBTypography tag="h5" style={{ fontStyle: "italic" }}>
+                      {accountInfo.username}
+                    </MDBTypography>
                     <MDBCardText>Web Designer</MDBCardText>
                     <MDBIcon far icon="edit mb-5" />
                   </MDBCol>
@@ -87,11 +85,7 @@ export default function Profile() {
                     <MDBCardBody className="p-4">
                       <MDBTypography tag="h6">Information</MDBTypography>
                       <hr className="mt-0 mb-4" />
-                      <Form
-                        form={form}
-                        onFinish={onFinish}
-                        layout="vertical"
-                      >
+                      <Form form={form} onFinish={onFinish} layout="vertical">
                         <MDBRow className="pt-1">
                           <MDBCol size="6" className="mb-3">
                             <Form.Item
@@ -150,10 +144,7 @@ export default function Profile() {
                             </Form.Item>
                           </MDBCol>
                           <MDBCol size="6" className="mb-3">
-                            <Form.Item
-                              name="role"
-                              label="Role"
-                            >
+                            <Form.Item name="role" label="Role">
                               <Input disabled value={accountInfo.role} />
                             </Form.Item>
                           </MDBCol>

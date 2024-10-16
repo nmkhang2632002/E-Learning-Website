@@ -10,7 +10,7 @@ export default function Navbar() {
   // set biến 'account' chứa all
   const account = useSelector(state => state?.account?.user?.user);
 
-  console.log("account", account);
+  // console.log("account", account);
 
   // set biến 'userSelector' chứa thông tin đã đăng nhập
   const accountInfo = useSelector(state => state?.account?.user?.user);
@@ -18,7 +18,7 @@ export default function Navbar() {
   // // check biến 'account' đã authenticated là TRUE chưa.
   // const isAuthenticated = account.isAuthenticated;
 
-  console.log("accountInfo", accountInfo);
+  // console.log("accountInfo", accountInfo);
 
 
   // Function xử lý thoát đăng nhập
