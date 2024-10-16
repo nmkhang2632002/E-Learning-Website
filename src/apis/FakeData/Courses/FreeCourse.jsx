@@ -5,13 +5,13 @@ export const FreeCourses = [
         img: "/img/nodejs.jpg",
         readlink: "https://en.wikipedia.org/wiki/nodejs",
         join: "/courses/mern/express",
-        price: "$89.00",
+        price: "$free",
         review: 85,
         title: "Node JS Tutorials",
         teachername: "Basant",
         duration: "1.50 Hrs",
         totalstudent: "35",
-        purchased: true
+        purchased: false
     },
     {
         id: 2,
@@ -20,13 +20,13 @@ export const FreeCourses = [
         readlink:
             "https://en.wikipedia.org/wiki/Outline_of_web_design_and_web_development",
         join: "/courses/mern/react",
-        price: "$149.00",
+        price: "$free",
         review: 285,
         title: "React Js Tutorials",
         teachername: "Basant",
         duration: "1.50 Hrs",
         totalstudent: "35",
-        purchased: true
+        purchased: false
     },
 ]
 

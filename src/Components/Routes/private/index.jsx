@@ -17,7 +17,7 @@ const Admin = () => {
     const navigate = useNavigate();
 
     // set biến 'userSelector' chứa thông tin đã đăng nhập
-    const accountInfo = useSelector(state => state?.account?.user);
+    const accountInfo = useSelector(state => state?.account?.user?.user);
     // console.log("account", account)
 
     // Function xử lý thoát đăng nhập
@@ -64,7 +64,7 @@ const Admin = () => {
                         activeClassName="active"
                         style={{ fontSize: ' 16px' }}
                     >
-                        Welcome, {accountInfo.user}
+                        Welcome, {accountInfo.username}
                     </NavLink>
 
                     <Popconfirm

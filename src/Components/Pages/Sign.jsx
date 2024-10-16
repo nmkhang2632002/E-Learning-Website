@@ -17,10 +17,10 @@ export default function Sign() {
     // Login API Function
     const onFinish = async (values) => {
         const { email, password } = values;
-        console.log('====================================');
-        console.log("Email:", email);
-        console.log("password:", password);
-        console.log('====================================');
+        // console.log('====================================');
+        // console.log("Email:", email);
+        // console.log("password:", password);
+        // console.log('====================================');
 
         // Retrieve accounts from localStorage
         const storedAccounts = JSON.parse(localStorage.getItem('Accounts')) || [];
@@ -33,8 +33,8 @@ export default function Sign() {
         if (user) {
             // Dispatch the login action
             dispatch(doLoginAction({
-                user: user.username,
-                isAuth: true // Assuming you want to set this to true upon login
+                user: user,
+                // isAuth: true
             }));
 
             // Navigate based on user role

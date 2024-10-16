@@ -5,13 +5,13 @@ export const ProgramingCourses = [
         img: "/img/java.jpg",
         readlink: "https://en.wikipedia.org/wiki/java",
         join: "/cources/programming/java",
-        price: "$249.00",
+        price: "100.00VND",
         review: 285,
         title: "Java Full Course",
         teachername: "Basant",
         duration: "4.50 Hrs",
         totalstudent: "145",
-        purchased: false
+        purchased: true
     },
     {
         id: 2,
@@ -19,13 +19,13 @@ export const ProgramingCourses = [
         img: "/img/Adv_java.jpg",
         readlink: "https://en.wikipedia.org/wiki/Advance java",
         join: "/cources/programming/advJava",
-        price: "$189.00",
+        price: "20.000VND",
         review: 156,
         title: "Advance Java",
         teachername: "Basant",
         duration: "4.13 Hrs",
         totalstudent: "75",
-        purchased: false
+        purchased: true
     },
     {
         id: 3,
@@ -33,13 +33,13 @@ export const ProgramingCourses = [
         img: "/img/JavaScript.jpg",
         readlink: "https://en.wikipedia.org/wiki/JavaScript",
         join: "/cources/programming/javascript",
-        price: "$89.00",
+        price: "15.000VND",
         review: 115,
         title: "JavaScript Tutorials",
         teachername: "Basant",
         duration: "4.50 Hrs",
         totalstudent: "135",
-        purchased: false
+        purchased: true
     },
 ]
 

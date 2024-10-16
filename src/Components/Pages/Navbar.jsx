@@ -8,25 +8,24 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   // set biến 'account' chứa all
-  const account = useSelector(state => state?.account?.user);
+  const account = useSelector(state => state?.account?.user?.user);
 
   console.log("account", account);
 
   // set biến 'userSelector' chứa thông tin đã đăng nhập
-  const accountInfo = useSelector(state => state?.account?.user);
+  const accountInfo = useSelector(state => state?.account?.user?.user);
 
   // // check biến 'account' đã authenticated là TRUE chưa.
   // const isAuthenticated = account.isAuthenticated;
 
-  // console.log("accountInfo", accountInfo);
+  console.log("accountInfo", accountInfo);
 
 
   // Function xử lý thoát đăng nhập
   const handleLogOut = () => {
 
     // console.log('Button Logout clicked')
-
-    localStorage.removeItem('Token');
+    // localStorage.removeItem('Token');
     dispatch(doLogoutAction());
     navigate('/');
   }
@@ -115,14 +114,14 @@ export default function Navbar() {
             </NavLink>
           </div>
 
-          {account.isAuth === true ? (
+          {account?.isAuthenticated === true ? (
             <>
               <NavLink
                 to="/profile"
                 className="nav-item nav-link"
                 activeClassName="active"
               >
-                Welcome, {accountInfo.user}
+                Welcome, {accountInfo.username}
               </NavLink>
 
               <button
