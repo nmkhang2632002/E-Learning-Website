@@ -32,7 +32,7 @@ export default function Register() {
                 phoneNumber,
                 dateOfBirth: dayjs(dateOfBirth).format('YYYY-MM-DD'), // Format date to string
                 __v: 0, // Default version
-                isAuthenticated: false, // Default isAuthenticated
+                isAuthenticated: true, // Default isAuthenticated
             };
 
             // Add the new account to the accounts array
