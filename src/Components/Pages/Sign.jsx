@@ -1,121 +1,97 @@
-import React from 'react'
-import Navbar from './Navbar'
-import Footer from './Footer'
+import Navbar from './Navbar';
+import Footer from './Footer';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Flex, notification } from 'antd';
-import { DoLogin } from '../../apis/Login/login';
-import { useDispatch } from 'react-redux';
+import { Button, Checkbox, Form, Input, notification } from 'antd';
+// import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+// import { doLoginAction } from '../../redux/slice/slice';
+import { Accounts } from '../../apis/FakeData/Users/Account';
+import { useDispatch } from 'react-redux';
 import { doLoginAction } from '../../redux/slice/slice';
 
 export default function Sign() {
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    // useState
-
-    // useEffect
+    const dispatch = useDispatch();
 
     // Login API Function
-    // Login
     const onFinish = async (values) => {
-        const { username, password } = (values);
-        console.log('username: ', username);
-        console.log('mật khẩu: ', password);
+        const { email, password } = values;
+        console.log('====================================');
+        console.log("Email:", email);
+        console.log("password:", password);
+        console.log('====================================');
 
+        // Retrieve accounts from localStorage
+        const storedAccounts = JSON.parse(localStorage.getItem('Accounts')) || [];
 
-        try {
-            let accessToken = '';
-            // lấy API
-            let res = await DoLogin(username, password);
-            console.log('Response Login: ', res);
+        // Check if the user exists and the password matches
+        const user = storedAccounts.find(account =>
+            account.email === email && account.password === password
+        );
 
-            // set biến token
-            accessToken = res.data.token;
-            // console.log('token:', accessToken);
-            // lưu vào LocalStorage
-            localStorage.setItem('Token', accessToken);
-            // Goi Redux
+        if (user) {
+            // Dispatch the login action
             dispatch(doLoginAction({
-                // access_token: accessToken,
-                account: res.data
+                user: user.username,
+                isAuth: true // Assuming you want to set this to true upon login
             }));
-            // Navigate to the home page
-            navigate('/');
-            // Show a success message
-            notification.success({
-                type: 'success',
-                message: 'Login successfully',
-                duration: 2,
-            })
-        } catch (error) {
-            // Log the error for debugging
-            console.log(error);
 
+            // Navigate based on user role
+            if (user.role === 'admin' || user.role === 'instructor') {
+                navigate('/admin'); // Navigate to admin route
+                notification.success({
+                    message: 'Login Successfully',
+                });
+            } else {
+                navigate('/'); // Navigate to default user route
+            }
+        } else {
+            // Show notification for invalid credentials
             notification.error({
-                message: 'Failed Login',
-                description: 'Something wrong.',
-                duration: 2,
+                message: 'Login Failed',
+                description: 'Incorrect email or password. Please try again.',
             });
         }
-        return;
     };
 
     return (
         <>
             <Navbar />
-
-            <div className=" m-4 ">
+            <div className="m-4">
                 <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
                     <h6 className="section-title bg-white text-center text-primary px-3">Sign In Page</h6>
                     <h1 className="mb-5">Sign In</h1>
                 </div>
-                <div className="singin container" style={{ height: "50vh", width: '100%', display: 'flex', justifyContent: "center" }}>
-
+                <div className="signin container" style={{ height: "50vh", width: '100%', display: 'flex', justifyContent: "center" }}>
                     {/* Form Login */}
                     <Form
                         name="login"
-                        initialValues={{
-                            remember: true,
-                        }}
-                        style={{
-                            width: '100%',
-                            maxWidth: "500px",
-                        }}
+                        initialValues={{ remember: true }}
+                        style={{ width: '100%', maxWidth: "500px" }}
                         onFinish={onFinish}
                         className='animated slideInRight'
                     >
                         <Form.Item
-                            name="username"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input your Username!',
-                                },
-                            ]}
+                            name="email"
+                            rules={[{ required: true, message: 'Please input your email!' }]}
                         >
-                            <Input prefix={<UserOutlined />} placeholder="Username" />
+                            <Input prefix={<UserOutlined />} placeholder="Email" />
                         </Form.Item>
                         <Form.Item
                             name="password"
-                            rules={[
-                                {
-                                    required: true,
-                                    message: 'Please input your Password!',
-                                },
-                            ]}
+                            rules={[{ required: true, message: 'Please input your password!' }]}
                         >
-                            <Input.Password prefix={<LockOutlined />} type="password" placeholder="Password" />
+                            <Input.Password prefix={<LockOutlined />} placeholder="Password" />
                         </Form.Item>
                         <Form.Item>
-                            <Flex justify="space-between" align="center">
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                 <Form.Item name="remember" valuePropName="checked" noStyle>
                                     <Checkbox>Remember me</Checkbox>
                                 </Form.Item>
                                 <a href="">Forgot password</a>
-                            </Flex>
+                            </div>
                         </Form.Item>
-
                         <Form.Item>
                             <Button block type="primary" htmlType="submit">
                                 Log in
@@ -125,8 +101,7 @@ export default function Sign() {
                     </Form>
                 </div>
             </div>
-
             <Footer />
         </>
-    )
+    );
 }

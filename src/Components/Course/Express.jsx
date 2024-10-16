@@ -6,12 +6,12 @@ import Footer from '../Pages/Footer'
 export default function EXpress() {
     return (
         <>
-        <Navbar/>
-             <div className="container-xxl py-5">
+            <Navbar />
+            <div className="container-xxl py-5">
                 <div className="container">
                     <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
                         <h6 className="section-title bg-white text-center text-primary px-3">Courses</h6>
-                        <h1 className="mb-5">Programming Languages Tutorials</h1>
+                        <h1 className="mb-5">Express Tutorials</h1>
                     </div>
                     <div className="row g-2 justify-content-center">
                         <Coursecart link="http://localhost:8080/App Developer\Day - 31 (21_08_23) 2.Express\36. Backend 2 (Express)\01. What is Express_.mp4" title="01. What is Express js" desc="Introduction of Express js." />
@@ -31,7 +31,7 @@ export default function EXpress() {
                     </div>
                 </div>
             </div>
-        <Footer/>
+            <Footer />
         </>
     )
 }

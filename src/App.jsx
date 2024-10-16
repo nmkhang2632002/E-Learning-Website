@@ -1,5 +1,5 @@
-import "./App.css";
-import {Routes, Route } from "react-router-dom";
+import "./input.css";
+import { Routes, Route } from "react-router-dom";
 
 import Home from "./Components/Pages/Home";
 import About1 from "./Components/Routes/About1";
@@ -32,8 +32,12 @@ import FullstackQuiz from "./Components/Quiz/FullstackQuiz";
 import JavascriptQuiz from "./Components/Quiz/JavascriptQuiz";
 import ReactQuiz from "./Components/Quiz/ReactQuiz";
 import Profile from "./Components/Pages/Profile";
-import Feedback from "./Components/Pages/Feedback";
+// import Feedback from "./Components/Pages/Feedback";
 import FeedbackAll from "./Components/Pages/FeedbackAll";
+import UserManagement from "./Components/Pages/UserManagement";
+import Admin from "./Components/Routes/private";
+import Dashboard from "./Components/Pages/Dashboard";
+import CouresManagement from "./Components/Pages/CourseManagement";
 
 function App() {
   return (
@@ -91,6 +95,15 @@ function App() {
         <Route path="/library" element={<ShowBook />} />
         {/* <Route path="/feedback/new" element={<Feedback />} /> */}
         <Route path="/feedback" element={<FeedbackAll />} />
+
+
+        {/* Route Private ADMIN */}
+        <Route path="/admin" element={<Admin />}>
+          <Route index path="/admin/dashboard" element={<Dashboard />} />
+          <Route path="/admin/user-management" element={<UserManagement />} />
+          <Route path="/admin/course-management" element={<CouresManagement />} />
+
+        </Route>
 
         <Route path="*" element={<ErrorPage />} />
       </Routes>

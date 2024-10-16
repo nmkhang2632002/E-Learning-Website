@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { doLogoutAction } from '../../redux/slice/slice';
@@ -9,15 +8,15 @@ export default function Navbar() {
   const navigate = useNavigate();
 
   // set biến 'account' chứa all
-  const account = useSelector(state => state?.account);
+  const account = useSelector(state => state?.account?.user);
 
-  // console.log("account", account);
+  console.log("account", account);
 
   // set biến 'userSelector' chứa thông tin đã đăng nhập
-  const accountInfo = useSelector(state => state?.account?.user?.account?.user);
+  const accountInfo = useSelector(state => state?.account?.user);
 
   // // check biến 'account' đã authenticated là TRUE chưa.
-  const isAuthenticated = account.isAuthenticated;
+  // const isAuthenticated = account.isAuthenticated;
 
   // console.log("accountInfo", accountInfo);
 
@@ -116,14 +115,14 @@ export default function Navbar() {
             </NavLink>
           </div>
 
-          {isAuthenticated ? (
+          {account.isAuth === true ? (
             <>
               <NavLink
                 to="/profile"
                 className="nav-item nav-link"
                 activeClassName="active"
               >
-                Welcome, {accountInfo.username}
+                Welcome, {accountInfo.user}
               </NavLink>
 
               <button
