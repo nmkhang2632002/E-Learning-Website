@@ -1,6 +1,6 @@
-import { Button, Input, notification, Space, Table, Tag, Typography } from 'antd';
+import { Button, Input, notification, Space, Table, Tag, Typography } from 'antd'; 
 import { useEffect, useState } from 'react';
-import { Accounts } from '../../apis/FakeData/Users/Account';
+import axios from 'axios'; // Import Axios
 
 const UserManagement = () => {
     const { Title } = Typography;
@@ -11,11 +11,23 @@ const UserManagement = () => {
     const [searchQuery, setSearchQuery] = useState(''); // State to store search input
     const [filteredAccounts, setFilteredAccounts] = useState([]); // State for filtered data
 
-    // useEffect to load data from localStorage on mount
+    // useEffect to load data from API on mount
     useEffect(() => {
-        const storedAccounts = JSON.parse(localStorage.getItem('Accounts')) || [];
-        setAccounts(storedAccounts);
-        setFilteredAccounts(storedAccounts); // Initially, all accounts are displayed
+        const fetchAccounts = async () => {
+            try {
+                const response = await axios.get('https://localhost:7222/api/User');
+                setAccounts(response.data);
+                setFilteredAccounts(response.data); 
+            } catch (error) {
+                console.error('Error fetching accounts:', error);
+                notification.error({
+                    message: 'Error fetching accounts',
+                    description: 'Could not load accounts. Please try again later.',
+                });
+            }
+        };
+
+        fetchAccounts(); // Call the fetchAccounts function
     }, []);
 
     // Handle search input change
@@ -25,7 +37,7 @@ const UserManagement = () => {
             setFilteredAccounts(accounts); // Reset if search is cleared
         } else {
             const filtered = accounts.filter(account =>
-                account.username.toLowerCase().includes(value.toLowerCase()) ||
+                account.fullName.toLowerCase().includes(value.toLowerCase()) ||
                 account.email.toLowerCase().includes(value.toLowerCase()) ||
                 account.phoneNumber.includes(value)
             );
@@ -33,30 +45,32 @@ const UserManagement = () => {
         }
     };
 
-    // Delete An Account
-    const deleteAccount = (id) => {
-        const updatedAccounts = accounts.filter(account => account._id.$oid !== id);
-        localStorage.setItem('Accounts', JSON.stringify(updatedAccounts));
-        setAccounts(updatedAccounts);
-        setFilteredAccounts(updatedAccounts); // Update filtered list after deletion
-        notification.success({
-            type: 'success',
-            message: 'Delete successfully',
-            duration: 2,
-        })
+    // Delete An Account (This assumes you have a delete endpoint)
+    const deleteAccount = async (id) => {
+        try {
+            await axios.delete(`https://localhost:7222/api/User/${id}`); // Adjust the URL according to your API
+            const updatedAccounts = accounts.filter(account => account.userId !== id);
+            setAccounts(updatedAccounts);
+            setFilteredAccounts(updatedAccounts); // Update filtered list after deletion
+            notification.success({
+                message: 'Delete successfully',
+                duration: 2,
+            });
+        } catch (error) {
+            console.error('Error deleting account:', error);
+            notification.error({
+                message: 'Error deleting account',
+                description: 'Could not delete account. Please try again later.',
+            });
+        }
     };
 
     const columns = [
         {
-            title: 'Username',
-            dataIndex: 'username',
-            key: 'username',
+            title: 'Full Name',
+            dataIndex: 'fullName',
+            key: 'fullName',
             render: (text) => <a>{text}</a>,
-        },
-        {
-            title: 'Date of Birth',
-            key: 'dateOfBirth',
-            dataIndex: 'dateOfBirth',
         },
         {
             title: 'Email',
@@ -70,14 +84,11 @@ const UserManagement = () => {
             key: 'role',
             render: (_, { role }) => {
                 let color;
-                switch (role) {
-                    case 'student':
+                switch (role.trim()) {
+                    case 'Student':
                         color = 'blue';
                         break;
-                    case 'instructor':
-                        color = 'green';
-                        break;
-                    case 'admin':
+                    case 'Admin':
                         color = 'red';
                         break;
                     default:
@@ -104,22 +115,21 @@ const UserManagement = () => {
                     <Button
                         type='primary'
                         danger ghost
-                        onClick={() => deleteAccount(record._id.$oid)}
-                        disabled={record.role === 'admin'} // Disable button if role is admin
+                        onClick={() => deleteAccount(record.userId.trim())} // Use userId instead of _id
+                        disabled={record.role.trim() === 'Admin'} // Disable button if role is admin
                     >
                         Delete account
                     </Button>
                 </Space>
             ),
         },
-
     ];
 
     return (
         <>
             {/* Header */}
             <div>
-                <Title level={2}>LIST OF ACCOUNT</Title>
+                <Title level={2}>LIST OF ACCOUNTS</Title>
             </div>
 
             {/* Top-Bar Search */}
@@ -135,7 +145,7 @@ const UserManagement = () => {
             </div>
 
             {/* Table */}
-            <Table columns={columns} dataSource={filteredAccounts} rowKey={(record) => record._id.$oid} />
+            <Table columns={columns} dataSource={filteredAccounts} rowKey={(record) => record.userId.trim()} />
         </>
     );
 };

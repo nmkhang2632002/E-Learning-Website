@@ -38,6 +38,7 @@ import UserManagement from "./Components/Pages/UserManagement";
 import Admin from "./Components/Routes/private";
 import Dashboard from "./Components/Pages/Dashboard";
 import CouresManagement from "./Components/Pages/CourseManagement";
+import Checkout from "./Components/Pages/Checkout";
 
 function App() {
   return (
@@ -95,7 +96,7 @@ function App() {
         <Route path="/library" element={<ShowBook />} />
         {/* <Route path="/feedback/new" element={<Feedback />} /> */}
         <Route path="/feedback" element={<FeedbackAll />} />
-
+        <Route path="/Pay" element={<Checkout />} />
 
         {/* Route Private ADMIN */}
         <Route path="/admin" element={<Admin />}>
