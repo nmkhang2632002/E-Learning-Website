@@ -1,5 +1,6 @@
 import { Button, Space, Table, Image, Typography, Input, notification } from 'antd';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 // Main
 const CourseManagement = () => {
@@ -10,77 +11,74 @@ const CourseManagement = () => {
     const [getAllCourses, setGetAllCourses] = useState([]);
     const [filteredCourses, setFilteredCourses] = useState([]);
 
-    // useEffect to load data from localStorage on mount
+    // useEffect to load data from the API
     useEffect(() => {
-        const storedMern = JSON.parse(localStorage.getItem('MernStackCourses')) || [];
-        const storedFullStack = JSON.parse(localStorage.getItem('FullStackCourses')) || [];
-        const storeProgramming = JSON.parse(localStorage.getItem('ProgrammingCourses')) || [];
-        const storeFreeCourses = JSON.parse(localStorage.getItem('FreeCourses')) || [];
+        const fetchCourses = async () => {
+            try {
+                const response = await axios.get('https://localhost:7222/api/Course/all-course');
+                setGetAllCourses(response.data);
+                setFilteredCourses(response.data); // Also set the initial filtered courses
+            } catch (error) {
+                notification.error({
+                    message: 'Failed to fetch courses',
+                    description: error.message,
+                });
+            }
+        };
 
-        // Combine all courses into one array
-        const combinedCourses = [...storedMern, ...storedFullStack, ...storeProgramming, ...storeFreeCourses];
-
-        // Update the state with the combined courses
-        setGetAllCourses(combinedCourses);
-        setFilteredCourses(combinedCourses); // Also set the initial filtered courses
+        fetchCourses();
     }, []);
 
     // Search function
     const onSearch = (value) => {
         const filtered = getAllCourses.filter((course) =>
-            course.title.toLowerCase().includes(value.toLowerCase())
+            course.name.toLowerCase().includes(value.toLowerCase())
         );
         setFilteredCourses(filtered);
     };
 
     // Delete a course
-    const deleteCourse = (title) => {
-        const updatedCourses = getAllCourses.filter(course => course.title !== title);
+    const deleteCourse = (courseId) => {
+        const updatedCourses = getAllCourses.filter(course => course.courseId !== courseId);
         setGetAllCourses(updatedCourses); // Update state
         setFilteredCourses(updatedCourses); // Also update filtered state
-        // Update localStorage if needed
-        localStorage.setItem('MernStackCourses', JSON.stringify(updatedCourses)); // Assuming all courses are from MernStack
+        // Here you can call an API to delete the course if needed
         notification.success({
             type: 'success',
-            message: 'Delete successfully',
+            message: 'Course deleted successfully',
             duration: 2,
-        })
+        });
     };
 
     const columns = [
         {
             title: 'Picture',
-            dataIndex: 'img',
-            key: 'img',
+            dataIndex: 'picture',
+            key: 'picture',
             render: (img) => (
                 <Image
                     width={100}
-                    src={img}
+                    src={img ? img : 'https://via.placeholder.com/100'}  // Fallback to placeholder if image URL is null or invalid
+                    alt="Course Image"
                 />
             ),
         },
         {
-            title: 'Title',
-            dataIndex: 'title',
-            key: 'title',
-            render: (text) => <a>{text}</a>,
-        },
-        {
-            title: 'Fee',
-            dataIndex: 'price',
-            key: 'price',
+            title: 'Course Name',
+            dataIndex: 'name',
+            key: 'name',
             render: (text) => <a>{text}</a>,
         },
         {
             title: 'Teacher',
-            dataIndex: 'teachername',
-            key: 'teachername',
-            render: (text) => <a>{text}</a>,
+            dataIndex: 'createBy',
+            key: 'createBy',
+            render: (text) => <a>{text.trim()}</a>,
         },
         {
-            title: 'Total Students',
-            dataIndex: 'totalstudent',
-            key: 'totalstudent',
+            title: 'Time (Hours)',
+            dataIndex: 'timeLearning',
+            key: 'timeLearning',
             render: (text) => <a>{text}</a>,
         },
         {
@@ -89,7 +87,7 @@ const CourseManagement = () => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <Button danger onClick={() => deleteCourse(record.title)}>
+                    <Button danger onClick={() => deleteCourse(record.courseId)}>
                         Delete
                     </Button>
                 </Space>
@@ -101,10 +99,10 @@ const CourseManagement = () => {
         <>
             {/* Header */}
             <div>
-                <Title level={2}>LIST OF COURSE</Title>
+                <Title level={2}>LIST OF COURSES</Title>
             </div>
 
-            {/* Top-Bar Btn*/}
+            {/* Top-Bar Btn */}
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Search
                     placeholder="Search Course by Name"
@@ -116,7 +114,7 @@ const CourseManagement = () => {
                 />
             </div>
             <br />
-            <Table columns={columns} dataSource={filteredCourses} rowKey="title" />
+            <Table columns={columns} dataSource={filteredCourses} rowKey="courseId" />
         </>
     );
 };
