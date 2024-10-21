@@ -10,21 +10,15 @@ import { FreeCourses } from "../../apis/FakeData/Courses/FreeCourse";
 // import { FullStackCourses } from "../../apis/FakeData/Courses/FullStack";
 // import { ProgramingCourses } from "../../apis/FakeData/Courses/Programing";
 
-
 export default function Cources() {
-
   // API
   // const [courses, setCourses] = useState([]);
 
   // FAKE DATA
   const [mernCourses, setMernCourses] = useState([]);
   const [programingCourses, setProgramingCourses] = useState([]);
-  const [fullStackCourses, setFullStackCourses] = useState([])
+  const [fullStackCourses, setFullStackCourses] = useState([]);
   const [freeCourses, setFreeCourses] = useState([]);
-
-  console.log('====================================');
-  console.log("Free Courses", freeCourses);
-  console.log('====================================');
 
   // useEffect API
   // useEffect(() => {
@@ -33,12 +27,11 @@ export default function Cources() {
 
   // useEffect FAKE DATA
   useEffect(() => {
-    setMernCourses(JSON.parse(localStorage.getItem('MernStackCourses')));
-    setFullStackCourses(JSON.parse(localStorage.getItem('FullStackCourses')));
-    setProgramingCourses(JSON.parse(localStorage.getItem('ProgramingCourses')));
-    setFreeCourses(JSON.parse(localStorage.getItem('FreeCourses')));
-  }, [])
-
+    setMernCourses(JSON.parse(localStorage.getItem("MernStackCourses")));
+    setFullStackCourses(JSON.parse(localStorage.getItem("FullStackCourses")));
+    setProgramingCourses(JSON.parse(localStorage.getItem("ProgramingCourses")));
+    setFreeCourses(JSON.parse(localStorage.getItem("FreeCourses")));
+  }, []);
 
   // API GET COURSES FUNCTION
   // const fetchCourses = async () => {
@@ -54,7 +47,6 @@ export default function Cources() {
   //     console.log("Error fetching Courses:", error);
   //   }
   // }
-
 
   return (
     <>
@@ -117,7 +109,6 @@ export default function Cources() {
           </div>
         </div>
       </div>
-
     </>
   );
 }
