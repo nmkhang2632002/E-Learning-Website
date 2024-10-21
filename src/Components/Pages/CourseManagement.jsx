@@ -46,15 +46,14 @@ const CourseManagement = () => {
     };
 
     // Delete a course
-    const deleteCourse = (title) => {
-        const updatedCourses = getAllCourses.filter(course => course.title !== title);
+    const deleteCourse = (courseId) => {
+        const updatedCourses = getAllCourses.filter(course => course.courseId !== courseId);
         setGetAllCourses(updatedCourses); // Update state
         setFilteredCourses(updatedCourses); // Also update filtered state
-        // Update localStorage if needed
-        localStorage.setItem('MernStackCourses', JSON.stringify(updatedCourses)); // Assuming all courses are from MernStack
+        // Here you can call an API to delete the course if needed
         notification.success({
             type: 'success',
-            message: 'Delete successfully',
+            message: 'Course deleted successfully',
             duration: 2,
         })
     };
@@ -78,10 +77,13 @@ const CourseManagement = () => {
             title: 'Picture',
             dataIndex: 'picture',
             key: 'picture',
+            dataIndex: 'picture',
+            key: 'picture',
             render: (img) => (
                 <Image
                     width={100}
-                    src={img}
+                    src={img ? img : 'https://via.placeholder.com/100'}  // Fallback to placeholder if image URL is null or invalid
+                    alt="Course Image"
                 />
             ),
         },
@@ -115,7 +117,7 @@ const CourseManagement = () => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <Button danger onClick={() => deleteCourse(record.title)}>
+                    <Button danger onClick={() => deleteCourse(record.courseId)}>
                         Delete
                     </Button>
                 </Space>
@@ -127,10 +129,10 @@ const CourseManagement = () => {
         <>
             {/* Header */}
             <div>
-                <Title level={2}>LIST OF COURSE</Title>
+                <Title level={2}>LIST OF COURSES</Title>
             </div>
 
-            {/* Top-Bar Btn*/}
+            {/* Top-Bar Btn */}
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Search
                     placeholder="Search Course by Name"
