@@ -7,14 +7,11 @@ export default function Coursestructure({ course }) {
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [buttonDisabled, setButtonDisabled] = useState(true);
     const [timeoutDuration, setTimeoutDuration] = useState(60);
-    // const [text, setText] = useState('https://ant.design/');
 
-
-    // set biến 'account' chứa all
-    // const account = useSelector(state => state?.account?.user?.user);
 
     // set biến 'userSelector' chứa thông tin đã đăng nhập
     const accountInfo = useSelector(state => state?.account?.user?.user);
+
     // Show modal when the user clicks "Buy Now"
     const showModal = (course) => {
         setSelectedCourse(course);
@@ -48,12 +45,12 @@ export default function Coursestructure({ course }) {
         <>
             {course && course.length > 0 ? (
                 course.map((data) => (
-                    <div key={data.id} className="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay={data.time}>
+                    <div key={data.courseId} className="col-lg-4 col-md-6 wow fadeInUp">
                         <div className="course-item bg-light">
                             <div className="position-relative overflow-hidden">
-                                <img className="img-fluid" src={data.img} alt="" />
+                                <img className="rounded mx-auto d-block img-fluid" style={{ width: 200, height: 200, objectFit: 'fill' }} src={data.picture} alt="" />
                                 <div className="w-100 d-flex justify-content-center position-absolute bottom-0 start-0 mb-4">
-                                    {/* Conditional button for "Buy Now" or "Learn Now" */}
+
                                     <Button
                                         type="primary"
                                         onClick={() => {
@@ -89,18 +86,18 @@ export default function Coursestructure({ course }) {
                                     <small className="fa fa-star text-primary" />
                                     <small>{data.review}</small>
                                 </div>
-                                <h5 className="mb-4">{data.title}</h5>
+                                <h5 className="mb-4">{data.name}</h5>
                             </div>
                             <div className="d-flex border-top">
                                 <small className="flex-fill text-center border-end py-2">
-                                    <i className="fa fa-user-tie text-primary me-2" />{data.teachername}
+                                    <i className="fa fa-user-tie text-primary me-2" />Teacher: {data.createBy}
                                 </small>
                                 <small className="flex-fill text-center border-end py-2">
-                                    <i className="fa fa-clock text-primary me-2" />{data.duration}
+                                    <i className="fa fa-clock text-primary me-2" />Duration: {data.timeLearning} hours
                                 </small>
-                                <small className="flex-fill text-center py-2">
+                                {/* <small className="flex-fill text-center py-2">
                                     <i className="fa fa-user text-primary me-2" />{data.totalstudent} Students
-                                </small>
+                                </small> */}
                             </div>
                         </div>
                     </div>

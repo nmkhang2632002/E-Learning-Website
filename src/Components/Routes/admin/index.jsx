@@ -17,8 +17,8 @@ const Admin = () => {
     const navigate = useNavigate();
 
     // set biến 'userSelector' chứa thông tin đã đăng nhập
-    const accountInfo = useSelector(state => state?.account?.user?.user);
-    // console.log("account", account)
+    const accountInfo = useSelector(state => state?.account?.user);
+    console.log("accountInfo", accountInfo)
 
     // Function xử lý thoát đăng nhập
 

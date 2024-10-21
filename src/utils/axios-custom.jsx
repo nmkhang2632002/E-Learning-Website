@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const baseURL = 'http://localhost:3000/api/';
-
+// const baseURL = process.env.BE_API_URL;
+const baseURL = "https://localhost:7222/api/";
 
 // Tạo instance axios với baseURL và header chứa token
 const instance = axios.create({

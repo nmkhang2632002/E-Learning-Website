@@ -1,5 +1,6 @@
 import { Button, Space, Table, Image, Typography, Input, notification } from 'antd';
 import { useEffect, useState } from 'react';
+import { GetAllCourses } from '../../apis/Coures/course';
 
 // Main
 const CourseManagement = () => {
@@ -8,29 +9,40 @@ const CourseManagement = () => {
 
     // useState
     const [getAllCourses, setGetAllCourses] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
     const [filteredCourses, setFilteredCourses] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
 
-    // useEffect to load data from localStorage on mount
+    // Fetch API All Courses
     useEffect(() => {
-        const storedMern = JSON.parse(localStorage.getItem('MernStackCourses')) || [];
-        const storedFullStack = JSON.parse(localStorage.getItem('FullStackCourses')) || [];
-        const storeProgramming = JSON.parse(localStorage.getItem('ProgrammingCourses')) || [];
-        const storeFreeCourses = JSON.parse(localStorage.getItem('FreeCourses')) || [];
-
-        // Combine all courses into one array
-        const combinedCourses = [...storedMern, ...storedFullStack, ...storeProgramming, ...storeFreeCourses];
-
-        // Update the state with the combined courses
-        setGetAllCourses(combinedCourses);
-        setFilteredCourses(combinedCourses); // Also set the initial filtered courses
+        const fetchAllCourses = async () => {
+            try {
+                const response = await GetAllCourses();
+                setGetAllCourses(response.data);
+                setFilteredCourses(response.data);
+            } catch (error) {
+                console.error('Error fetching accounts:', error);
+                notification.error({
+                    message: 'Error fetching accounts',
+                    description: 'Could not load accounts. Please try again later.',
+                });
+            }
+        }
+        fetchAllCourses();
     }, []);
 
-    // Search function
+
+    // Handle search input change
     const onSearch = (value) => {
-        const filtered = getAllCourses.filter((course) =>
-            course.title.toLowerCase().includes(value.toLowerCase())
-        );
-        setFilteredCourses(filtered);
+        setSearchQuery(value);
+        if (value === '') {
+            setFilteredCourses(getAllCourses); // Reset if search is cleared
+        } else {
+            const filtered = getAllCourses.filter(getAllCourses =>
+                getAllCourses.name.toLowerCase().includes(value.toLowerCase())
+            );
+            setFilteredCourses(filtered);
+        }
     };
 
     // Delete a course
@@ -47,11 +59,25 @@ const CourseManagement = () => {
         })
     };
 
+    // Handle page change
+    const onPageChange = (page) => {
+        setCurrentPage(page);
+    };
+
     const columns = [
         {
+            title: 'No.',
+            dataIndex: 'key',
+            key: 'key',
+            render: (text, record, index) => {
+                // Calculate row number based on current page
+                return (currentPage - 1) * 5 + (index + 1);
+            },
+        },
+        {
             title: 'Picture',
-            dataIndex: 'img',
-            key: 'img',
+            dataIndex: 'picture',
+            key: 'picture',
             render: (img) => (
                 <Image
                     width={100}
@@ -61,8 +87,8 @@ const CourseManagement = () => {
         },
         {
             title: 'Title',
-            dataIndex: 'title',
-            key: 'title',
+            dataIndex: 'name',
+            key: 'name',
             render: (text) => <a>{text}</a>,
         },
         {
@@ -73,15 +99,15 @@ const CourseManagement = () => {
         },
         {
             title: 'Teacher',
-            dataIndex: 'teachername',
-            key: 'teachername',
+            dataIndex: 'createBy',
+            key: 'createBy',
             render: (text) => <a>{text}</a>,
         },
         {
-            title: 'Total Students',
-            dataIndex: 'totalstudent',
-            key: 'totalstudent',
-            render: (text) => <a>{text}</a>,
+            title: 'Durations',
+            dataIndex: 'timeLearning',
+            key: 'timeLearning',
+            render: (text) => <a>{text} hours</a>,
         },
         {
             title: 'Actions',
@@ -116,7 +142,14 @@ const CourseManagement = () => {
                 />
             </div>
             <br />
-            <Table columns={columns} dataSource={filteredCourses} rowKey="title" />
+            <Table
+                columns={columns}
+                dataSource={filteredCourses} rowKey="title"
+                pagination={{
+                    pageSize: 5,
+                    onChange: onPageChange,
+                }}
+            />
         </>
     );
 };

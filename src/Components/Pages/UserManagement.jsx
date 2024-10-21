@@ -1,4 +1,4 @@
-import { Button, Input, notification, Space, Table, Tag, Typography } from 'antd'; 
+import { Button, Input, notification, Space, Table, Tag, Typography } from 'antd';
 import { useEffect, useState } from 'react';
 import axios from 'axios'; // Import Axios
 
@@ -10,6 +10,9 @@ const UserManagement = () => {
     const [accounts, setAccounts] = useState([]);
     const [searchQuery, setSearchQuery] = useState(''); // State to store search input
     const [filteredAccounts, setFilteredAccounts] = useState([]); // State for filtered data
+    const [currentPage, setCurrentPage] = useState(1);
+
+
 
     // useEffect to load data from API on mount
     useEffect(() => {
@@ -17,7 +20,7 @@ const UserManagement = () => {
             try {
                 const response = await axios.get('https://localhost:7222/api/User');
                 setAccounts(response.data);
-                setFilteredAccounts(response.data); 
+                setFilteredAccounts(response.data);
             } catch (error) {
                 console.error('Error fetching accounts:', error);
                 notification.error({
@@ -65,7 +68,21 @@ const UserManagement = () => {
         }
     };
 
+    // Handle page change
+    const onPageChange = (page) => {
+        setCurrentPage(page);
+    };
+
     const columns = [
+        {
+            title: 'No.',
+            dataIndex: 'key',
+            key: 'key',
+            render: (text, record, index) => {
+                // Calculate row number based on current page
+                return (currentPage - 1) * 5 + (index + 1);
+            },
+        },
         {
             title: 'Full Name',
             dataIndex: 'fullName',
@@ -145,7 +162,15 @@ const UserManagement = () => {
             </div>
 
             {/* Table */}
-            <Table columns={columns} dataSource={filteredAccounts} rowKey={(record) => record.userId.trim()} />
+            <Table
+                columns={columns}
+                dataSource={filteredAccounts}
+                rowKey={(record) => record.userId.trim()}
+                pagination={{
+                    pageSize: 5,
+                    onChange: onPageChange,
+                }}
+            />
         </>
     );
 };

@@ -1,5 +1,5 @@
 import "./input.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 import Home from "./Components/Pages/Home";
 import About1 from "./Components/Routes/About1";
@@ -35,7 +35,7 @@ import Profile from "./Components/Pages/Profile";
 // import Feedback from "./Components/Pages/Feedback";
 import FeedbackAll from "./Components/Pages/FeedbackAll";
 import UserManagement from "./Components/Pages/UserManagement";
-import Admin from "./Components/Routes/private";
+import Admin from "./Components/Routes/admin";
 import Dashboard from "./Components/Pages/Dashboard";
 import CouresManagement from "./Components/Pages/CourseManagement";
 import Checkout from "./Components/Pages/Checkout";
@@ -98,12 +98,15 @@ function App() {
         <Route path="/feedback" element={<FeedbackAll />} />
         <Route path="/Pay" element={<Checkout />} />
 
-        {/* Route Private ADMIN */}
+        {/* Route ADMIN */}
         <Route path="/admin" element={<Admin />}>
-          <Route index path="/admin/dashboard" element={<Dashboard />} />
+          {/* Redirect from /admin to /admin/dashboard */}
+          <Route index element={<Navigate to="/admin/dashboard" />} />
+
+          {/* Other routes */}
+          <Route path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/user-management" element={<UserManagement />} />
           <Route path="/admin/course-management" element={<CouresManagement />} />
-
         </Route>
 
         <Route path="*" element={<ErrorPage />} />
