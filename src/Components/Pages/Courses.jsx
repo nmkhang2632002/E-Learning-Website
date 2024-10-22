@@ -10,9 +10,7 @@ import { FreeCourses } from "../../apis/FakeData/Courses/FreeCourse";
 // import { FullStackCourses } from "../../apis/FakeData/Courses/FullStack";
 // import { ProgramingCourses } from "../../apis/FakeData/Courses/Programing";
 
-
 export default function Cources() {
-
   // API
   const [allCourses, setAllCourses] = useState([]);
 
@@ -72,7 +70,6 @@ export default function Cources() {
           </div>
         </div>
       </div>
-
     </>
   );
 }

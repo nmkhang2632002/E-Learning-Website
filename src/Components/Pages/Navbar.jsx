@@ -1,34 +1,17 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { doLogoutAction } from '../../redux/slice/slice';
+import { useDispatch } from "react-redux";
+import { doLogoutAction, useAccount } from "../../redux/slice/accountSlice";
 
 export default function Navbar() {
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // set biến 'account' chứa all
-  const account = useSelector(state => state?.account?.user?.user);
-
-  // console.log("account", account);
-
-  // set biến 'userSelector' chứa thông tin đã đăng nhập
-  const accountInfo = useSelector(state => state?.account?.user?.user);
-
-  // // check biến 'account' đã authenticated là TRUE chưa.
-  // const isAuthenticated = account.isAuthenticated;
-
-  // console.log("accountInfo", accountInfo);
-
-
-  // Function xử lý thoát đăng nhập
+  const account = useAccount();
+  const accountInfo = account.user;
   const handleLogOut = () => {
-
-    // console.log('Button Logout clicked')
-    // localStorage.removeItem('Token');
     dispatch(doLogoutAction());
-    navigate('/');
-  }
+    navigate("/");
+  };
 
   return (
     <>
@@ -121,7 +104,7 @@ export default function Navbar() {
                 className="nav-item nav-link"
                 activeClassName="active"
               >
-                Welcome, {accountInfo.username}
+                Welcome, {accountInfo?.UserName}
               </NavLink>
 
               <button
@@ -136,7 +119,7 @@ export default function Navbar() {
               <Link to="/signin">
                 <button
                   className="btn btn-primary py-4 px-lg-5 d-none d-lg-block"
-                // onClick={() => loginWithRedirect()}
+                  // onClick={() => loginWithRedirect()}
                 >
                   Join Now<i className="fa fa-arrow-right ms-3"></i>
                 </button>
