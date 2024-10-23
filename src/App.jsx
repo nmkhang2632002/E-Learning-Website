@@ -39,6 +39,7 @@ import Admin from "./Components/Routes/private";
 import Dashboard from "./Components/Pages/Dashboard";
 import CouresManagement from "./Components/Pages/CourseManagement";
 import Checkout from "./Components/Pages/Checkout";
+import CourseLesson from "./Components/Course/CourseLesson";
 
 function App() {
   return (
@@ -78,10 +79,8 @@ function App() {
         <Route path="/courses/fullstack/express" element={<Express />} />
         <Route path="/courses/fullstack/react" element={<Reactjs />} />
         <Route path="/courses/fullstack/mongodb" element={<Mongodb />} />
-        <Route
-          path="/courses/fullstack/javascript"
-          element={<Javascript />}
-        />
+        <Route path="/courses/fullstack/javascript" element={<Javascript />} />
+        <Route path="/courses/lesson" element={<CourseLesson />} />
         <Route path="/courses/fullstack/html" element={<Html />} />
         <Route path="/courses/fullstack/css" element={<Css />} />
 
@@ -102,8 +101,10 @@ function App() {
         <Route path="/admin" element={<Admin />}>
           <Route index path="/admin/dashboard" element={<Dashboard />} />
           <Route path="/admin/user-management" element={<UserManagement />} />
-          <Route path="/admin/course-management" element={<CouresManagement />} />
-
+          <Route
+            path="/admin/course-management"
+            element={<CouresManagement />}
+          />
         </Route>
 
         <Route path="*" element={<ErrorPage />} />

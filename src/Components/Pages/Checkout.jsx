@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import api from "../../utils/axios-custom";
 
 const Checkout = () => {
   const [paypalClientId, setPaypalClientId] = useState(
@@ -31,15 +32,9 @@ const Checkout = () => {
         .Buttons({
           createOrder: async () => {
             try {
-              const response = await axios.post(
-                "https://c0b9-14-191-223-23.ngrok-free.app/api/Paypal/create-order",
-                { amount: totalMoney },
-                {
-                  headers: {
-                    "ngrok-skip-browser-warning": "true",
-                  },
-                }
-              );
+              const response = await api.post("/api/Paypal/create-order", {
+                amount: totalMoney,
+              });
               return response.data.orderID; // Trả về order ID
             } catch (error) {
               console.error("Error creating order:", error);
@@ -49,16 +44,9 @@ const Checkout = () => {
           },
           onApprove: async (data) => {
             try {
-              console.log(data.orderID + " check orderID");
-              const response = await axios.post(
-                "https://c0b9-14-191-223-23.ngrok-free.app/api/Paypal",
-                { orderID: data.orderID },
-                {
-                  headers: {
-                    "ngrok-skip-browser-warning": "true",
-                  },
-                }
-              );
+              const response = await api.post("/api/Paypal", {
+                orderID: data.orderID,
+              });
               if (response.data === "Successs") {
                 setNotification("The order is created successfully!");
               } else {
