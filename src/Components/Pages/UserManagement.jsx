@@ -1,15 +1,24 @@
-import { Button, Input, notification, Space, Table, Tag, Typography } from 'antd'; 
+import { Button, Input, notification, Space, Table, Tag, Typography, Modal, Form, Select } from 'antd'; 
 import { useEffect, useState } from 'react';
 import axios from 'axios'; // Import Axios
 
 const UserManagement = () => {
     const { Title } = Typography;
     const { Search } = Input;
+    const { Option } = Select;
 
     // useState
     const [accounts, setAccounts] = useState([]);
-    const [searchQuery, setSearchQuery] = useState(''); // State to store search input
-    const [filteredAccounts, setFilteredAccounts] = useState([]); // State for filtered data
+    const [searchQuery, setSearchQuery] = useState('');
+    const [filteredAccounts, setFilteredAccounts] = useState([]);
+    const [isModalVisible, setIsModalVisible] = useState(false); // Modal state
+    const [newUser, setNewUser] = useState({
+        fullName: '',
+        phoneNumber: '',
+        email: '',
+        password: '',
+        role: ''
+    }); // State for new user input
 
     // useEffect to load data from API on mount
     useEffect(() => {
@@ -45,10 +54,50 @@ const UserManagement = () => {
         }
     };
 
-    // Delete An Account (This assumes you have a delete endpoint)
+    // Handle input change for new user
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewUser({ ...newUser, [name]: value });
+    };
+
+    // Handle role change from dropdown
+    const handleRoleChange = (value) => {
+        setNewUser({ ...newUser, role: value });
+    };
+
+    // Handle modal visibility
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
+
+    // Handle adding new user
+    const handleAddUser = async () => {
+        try {
+            const response = await axios.post('https://localhost:7222/api/User', newUser);
+            setAccounts([...accounts, response.data]); // Add the new user to the list
+            setFilteredAccounts([...accounts, response.data]); // Update filtered accounts
+            notification.success({
+                message: 'User added successfully',
+                duration: 2,
+            });
+            setIsModalVisible(false); // Close modal after success
+        } catch (error) {
+            console.error('Error adding user:', error);
+            notification.error({
+                message: 'Error adding user',
+                description: 'Could not add user. Please try again later.',
+            });
+        }
+    };
+
+    // Delete An Account
     const deleteAccount = async (id) => {
         try {
-            await axios.delete(`https://localhost:7222/api/User/${id}`); // Adjust the URL according to your API
+            await axios.delete(`https://localhost:7222/api/User/${id}`); 
             const updatedAccounts = accounts.filter(account => account.userId !== id);
             setAccounts(updatedAccounts);
             setFilteredAccounts(updatedAccounts); // Update filtered list after deletion
@@ -132,7 +181,7 @@ const UserManagement = () => {
                 <Title level={2}>LIST OF ACCOUNTS</Title>
             </div>
 
-            {/* Top-Bar Search */}
+            {/* Top-Bar Search and Add User Button */}
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <Search
                     placeholder="Search Account by Name"
@@ -142,10 +191,52 @@ const UserManagement = () => {
                     style={{ margin: '20px 20px 20px 0', width: '33%' }}
                     onSearch={onSearch} // Call onSearch when user submits
                 />
+
+                {/* Add User Button */}
+                <Button type="primary" onClick={showModal}>
+                    Add User
+                </Button>
             </div>
 
             {/* Table */}
             <Table columns={columns} dataSource={filteredAccounts} rowKey={(record) => record.userId.trim()} />
+
+            {/* Modal for Adding New User */}
+            <Modal
+                title="Add New User"
+                visible={isModalVisible}
+                onOk={handleAddUser}
+                onCancel={handleCancel}
+                okText="Add"
+                cancelText="Cancel"
+            >
+                <Form layout="vertical">
+                    <Form.Item label="Full Name">
+                        <Input name="fullName" value={newUser.fullName} onChange={handleInputChange} />
+                    </Form.Item>
+
+                    <Form.Item label="Phone Number">
+                        <Input name="phoneNumber" value={newUser.phoneNumber} onChange={handleInputChange} />
+                    </Form.Item>
+
+                    <Form.Item label="Email">
+                        <Input name="email" value={newUser.email} onChange={handleInputChange} />
+                    </Form.Item>
+
+                    <Form.Item label="Password">
+                        <Input.Password name="password" value={newUser.password} onChange={handleInputChange} />
+                    </Form.Item>
+
+                    <Form.Item label="Role">
+                        <Select value={newUser.role} onChange={handleRoleChange}>
+                            <Option value="Teacher">Teacher</Option>
+                            <Option value="Student">Student</Option>
+                            <Option value="Staff">Staff</Option>
+                            <Option value="Manager">Manager</Option>
+                        </Select>
+                    </Form.Item>
+                </Form>
+            </Modal>
         </>
     );
 };
