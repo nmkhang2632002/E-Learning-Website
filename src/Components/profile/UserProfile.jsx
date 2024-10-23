@@ -69,7 +69,7 @@ const UserProfile = () => {
                         }}
                         cover={<img alt="example" src="https://avatar.iran.liara.run/public/20" />}
                     >
-                        <Meta title="Hello" description="sdadas" />
+                        {/* <Meta ti/> */}
                     </Card>
                 </Col>
 
