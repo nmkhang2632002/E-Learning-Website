@@ -18,7 +18,7 @@ export default function Sign() {
 
     try {
       const response = await api.post(
-        `/api/Authorize/Login?email=${email}&password=${password}`
+        `/Authorize/Login?email=${email}&password=${password}`
       );
       const data = await response.data.data;
       if (data) {

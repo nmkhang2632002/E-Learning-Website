@@ -39,6 +39,8 @@ import Admin from "./Components/Routes/admin";
 import Dashboard from "./Components/Pages/Dashboard";
 import CouresManagement from "./Components/Pages/CourseManagement";
 import Checkout from "./Components/Pages/Checkout";
+import UserProfile from "./Components/profile/UserProfile";
+import UserCourse from "./Components/profile/UserCourse";
 
 function App() {
   return (
@@ -55,7 +57,14 @@ function App() {
         <Route path="/signin" element={<Sign />} />
 
         <Route path="/register" element={<SignUp />} />
-        <Route path="/profile" element={<Profile />} />
+
+        {/* Profile User Route */}
+        <Route path="/profile" element={<Profile />} >
+          <Route index element={<Navigate to="/profile/info" />} />
+
+          <Route path="/profile/info" element={<UserProfile />} />
+          <Route path="/profile/course" element={<UserCourse />} />
+        </Route>
 
         <Route path="/test" element={<Test />} />
         <Route path="/test/java" element={<JavaQuiz />} />

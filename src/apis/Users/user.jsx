@@ -13,3 +13,7 @@ export const DoAddNewUser = (fullName, phoneNumber, email, password) => {
         password: password
     })
 }
+
+export const GetUserById = (id) => {
+    return axios.get(`User/${id}`)
+}
