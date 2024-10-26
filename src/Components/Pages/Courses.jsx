@@ -1,86 +1,77 @@
 import { useEffect, useState } from "react";
+import api from "../../utils/axios-custom";
 import Coursestructure from "../Course/Coursestructure";
-
-// API
-// import { GetCourses } from "../../apis/Coures/course";
-
-// FAKE DATA
-import { FreeCourses } from "../../apis/FakeData/Courses/FreeCourse";
-// import { MernStackCourses } from "../../apis/FakeData/Courses/Mern";
-// import { FullStackCourses } from "../../apis/FakeData/Courses/FullStack";
-// import { ProgramingCourses } from "../../apis/FakeData/Courses/Programing";
+import { useAccount } from "../../redux/slice/accountSlice";
 
 export default function Cources() {
-  // API
-  // const [courses, setCourses] = useState([]);
-
-  // FAKE DATA
   const [mernCourses, setMernCourses] = useState([]);
   const [programingCourses, setProgramingCourses] = useState([]);
-  const [fullStackCourses, setFullStackCourses] = useState([]);
-  const [freeCourses, setFreeCourses] = useState([]);
+  const { user } = useAccount();
+  const getAllCourse = async () => {
+    try {
+      const resCourse = await api.get("/api/Course/all-course");
+      const resCategory = await api.get("/api/Category/all-Category");
+      const getAllPusrchase = await api.get(
+        "/api/UserCourse/get-all-UserCourse"
+      );
+      const courseData = await resCourse.data;
+      const categoryData = await resCategory.data;
+      const allCourseByCategory = categoryData.map((category) => {
+        const courseGroup = courseData
+          .filter((course) => course.cateId === category.idcategory)
+          .map((course) => {
+            const coursePurchased = getAllPusrchase.data.find(
+              (coursePurchased) =>
+                coursePurchased.courseId === course.courseId &&
+                coursePurchased.userId === user.UserId
+            );
+            return {
+              ...course,
+              isPuchrase: coursePurchased ? true : false,
+            };
+          });
+        return {
+          categroyId: category.idcategory,
+          categoryName: category.name,
+          courses: courseGroup,
+        };
+      });
 
-  // useEffect API
-  // useEffect(() => {
-  //   fetchCourses();
-  // }, [])
-
-  // useEffect FAKE DATA
+      setMernCourses(allCourseByCategory);
+    } catch (error) {
+      console.error("Error fetching course data:", error);
+    }
+  };
   useEffect(() => {
-    setMernCourses(JSON.parse(localStorage.getItem("MernStackCourses")));
-    setFullStackCourses(JSON.parse(localStorage.getItem("FullStackCourses")));
+    getAllCourse();
     setProgramingCourses(JSON.parse(localStorage.getItem("ProgramingCourses")));
-    setFreeCourses(JSON.parse(localStorage.getItem("FreeCourses")));
   }, []);
-
-  // API GET COURSES FUNCTION
-  // const fetchCourses = async () => {
-
-  //   try {
-  //     const res = await GetCourses();
-  //     // console.log("res", res);
-
-  //     // fetch successfully
-  //     const dataCourses = res?.data || []
-  //     setCourses(dataCourses);
-  //   } catch (error) {
-  //     console.log("Error fetching Courses:", error);
-  //   }
-  // }
 
   return (
     <>
-      {/* ************** MERN-STACK COURSES ***************/}
-      <div className="container-xxl py-5">
-        <div className="container">
-          <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
-            <h6 className="section-title bg-white text-center text-primary px-3">
-              Mern-Stack
-            </h6>
-            <h1 className="mb-5">Premier Courses</h1>
-          </div>
-          <div className="row g-4 justify-content-center">
-            <Coursestructure course={mernCourses} />
-          </div>
-        </div>
-      </div>
-
-      {/* ************** Full-Stack COURSES ***************/}
-      <div className="container-xxl py-5">
-        <div className="container">
-          <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
-            <h6 className="section-title bg-white text-center text-primary px-3">
-              Full-Stack
-            </h6>
-            <h1 className="mb-5">Premier Courses</h1>
-          </div>
-          <div className="row g-4 justify-content-center">
-            <Coursestructure course={fullStackCourses} />
+      {mernCourses.map((course) => (
+        <div className="container-xxl py-5" key={course.categroyId}>
+          <div className="container">
+            <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
+              <h6 className="section-title bg-white text-center text-primary px-3">
+                {course.categoryName}
+              </h6>
+            </div>
+            <div
+              className="row g-4 justify-content-center"
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "1rem",
+              }}
+            >
+              {course.courses.map((course) => (
+                <Coursestructure key={course.courseId} course={course} />
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-
-      {/* ************** PROGRAMING COURSES ***************/}
+      ))}
       <div className="container-xxl py-5">
         <div className="container">
           <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
@@ -90,22 +81,7 @@ export default function Cources() {
             <h1 className="mb-5">Premier Courses</h1>
           </div>
           <div className="row g-4 justify-content-center">
-            <Coursestructure course={programingCourses} />
-          </div>
-        </div>
-      </div>
-
-      {/* ************** FREE COURSES ***************/}
-      <div className="container-xxl py-5">
-        <div className="container">
-          <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
-            <h6 className="section-title bg-white text-center text-primary px-3">
-              Category
-            </h6>
-            <h1 className="mb-5">Free Courses</h1>
-          </div>
-          <div className="row g-4 justify-content-center">
-            <Coursestructure course={freeCourses} />
+            <Coursestructure courses={programingCourses} />
           </div>
         </div>
       </div>

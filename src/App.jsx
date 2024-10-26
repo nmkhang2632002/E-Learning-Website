@@ -80,7 +80,7 @@ function App() {
         <Route path="/courses/fullstack/react" element={<Reactjs />} />
         <Route path="/courses/fullstack/mongodb" element={<Mongodb />} />
         <Route path="/courses/fullstack/javascript" element={<Javascript />} />
-        <Route path="/courses/lesson" element={<CourseLesson />} />
+        <Route path="/courses/:couserId/lesson" element={<CourseLesson />} />
         <Route path="/courses/fullstack/html" element={<Html />} />
         <Route path="/courses/fullstack/css" element={<Css />} />
 
