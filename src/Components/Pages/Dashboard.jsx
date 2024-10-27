@@ -1,18 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, AppBar, Toolbar, IconButton, Avatar, Badge } from '@mui/material';
+import { Box, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, CircularProgress } from '@mui/material';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import MailIcon from '@mui/icons-material/Mail';
 import { createTheme } from '@mui/material/styles';
+import axios from 'axios';
 
-// Dữ liệu biểu đồ
+// Data for pie chart
 const pieData = [
   { name: 'Math', value: 205 },
   { name: 'English', value: 170 },
   { name: 'Science', value: 111 },
   { name: 'Geography', value: 150 },
 ];
+
+// Define colors for the pie chart segments
+const pieColors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 const lineData = [
   { month: 'Jan', students: 120 },
@@ -21,19 +23,6 @@ const lineData = [
   { month: 'Apr', students: 180 },
   { month: 'May', students: 220 },
   { month: 'Jun', students: 170 },
-];
-
-const classes = [
-  { name: 'Class A', totalStudents: 30 },
-  { name: 'Class B', totalStudents: 25 },
-  { name: 'Class C', totalStudents: 28 },
-  { name: 'Class D', totalStudents: 32 },
-  { name: 'Class E', totalStudents: 20 },
-  { name: 'Class F', totalStudents: 22 },
-  { name: 'Class G', totalStudents: 24 },
-  { name: 'Class H', totalStudents: 29 },
-  { name: 'Class I', totalStudents: 18 },
-  { name: 'Class J', totalStudents: 15 },
 ];
 
 const demoTheme = createTheme({
@@ -49,15 +38,31 @@ const demoTheme = createTheme({
 
 const Dashboard = () => {
   const [open, setOpen] = useState(false);
+  const [courses, setCourses] = useState([]); // State for courses data
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
 
-  const toggleDrawer = (newOpen) => () => {
-    setOpen(newOpen);
-  };
+  // Fetch courses data from the API
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get('https://localhost:7222/api/User');
+        // console.error('  data :', response.data);
+
+        setCourses(response.data); // Set the courses data to state
+      } catch (error) {
+        console.error('Error fetching courses data:', error);
+        setError('Failed to load courses data'); // Set error message
+      } finally {
+        setLoading(false); // Set loading to false after the fetch
+      }
+    };
+
+    fetchCourses();
+  }, []);
 
   return (
     <Box sx={{ display: 'flex', bgcolor: '#f5f5f5' }}>
-     
-
       <Box 
         sx={{ 
           flexGrow: 1, 
@@ -65,8 +70,6 @@ const Dashboard = () => {
           transition: 'margin-left 0.3s ease' 
         }}
       >
-      
-
         <Box sx={{ padding: 2 }}>
           <Typography variant="h4" sx={{ marginBottom: 2, color: demoTheme.palette.primary.main }}>Dashboard</Typography>
           
@@ -75,9 +78,9 @@ const Dashboard = () => {
               <Typography variant="h6" sx={{ color: demoTheme.palette.primary.main }}>Students</Typography>
               <ResponsiveContainer width="100%" height={200}>
                 <PieChart>
-                  <Pie data={pieData} dataKey="value" cx="50%" cy="50%" outerRadius={80} fill="#8884d8">
+                  <Pie data={pieData} dataKey="value" cx="50%" cy="50%" outerRadius={80}>
                     {pieData.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#0088FE' : '#00C49F'} />
+                      <Cell key={`cell-${index}`} fill={pieColors[index % pieColors.length]} />
                     ))}
                   </Pie>
                   <Tooltip />
@@ -86,24 +89,34 @@ const Dashboard = () => {
               <Typography variant="body1">Total: {pieData.reduce((total, entry) => total + entry.value, 0)}</Typography>
             </Box>
 
-            {/* Bảng danh sách lớp học bên phải */}
+            {/* Course User List Table */}
             <Box sx={{ bgcolor: '#cfe8fc', border: '1px solid #1976d2', borderRadius: '8px', padding: 2, flex: 1, marginLeft: 2 }}>
-              <Typography variant="h6" sx={{ color: demoTheme.palette.primary.main, marginBottom: 2 }}>Class List</Typography>
+              <Typography variant="h6" sx={{ color: demoTheme.palette.primary.main, marginBottom: 2 }}>Course User</Typography>
               <TableContainer component={Paper} sx={{ maxHeight: 300, overflowY: 'auto' }}>
                 <Table stickyHeader>
                   <TableHead>
                     <TableRow>
-                      <TableCell sx={{ borderBottom: '2px solid #1976d2', fontWeight: 'bold' }}>Class Name</TableCell>
-                      <TableCell align="right" sx={{ borderBottom: '2px solid #1976d2', fontWeight: 'bold' }}>Total Students</TableCell>
+                      <TableCell sx={{ borderBottom: '2px solid #1976d2', fontWeight: 'bold' }}>Full Name</TableCell>
+                      <TableCell align="right" sx={{ borderBottom: '2px solid #1976d2', fontWeight: 'bold' }}>Email</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {classes.map((classItem, index) => (
-                      <TableRow key={index}>
-                        <TableCell>{classItem.name}</TableCell>
-                        <TableCell align="right">{classItem.totalStudents}</TableCell>
+                    {loading ? (
+                      <TableRow>
+                        <TableCell colSpan={3} align="center"><CircularProgress /></TableCell>
                       </TableRow>
-                    ))}
+                    ) : error ? (
+                      <TableRow>
+                        <TableCell colSpan={3} align="center">{error}</TableCell>
+                      </TableRow>
+                    ) : (
+                      courses.map((course, index) => (
+                        <TableRow key={index}>
+                          <TableCell>{course.fullName}</TableCell>
+                          <TableCell align="right">{course.email}</TableCell>
+                        </TableRow>
+                      ))
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>
@@ -126,6 +139,10 @@ const Dashboard = () => {
       </Box>
     </Box>
   );
+};
+
+Dashboard.propTypes = {
+  open: PropTypes.bool,
 };
 
 export default Dashboard;
