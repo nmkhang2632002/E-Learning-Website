@@ -1,8 +1,8 @@
 import { Button, Input, notification, Space, Table, Tag, Typography, Modal, Form, Select } from 'antd'; 
 import { useEffect, useState } from 'react';
 import axios from 'axios'; // Import Axios
-import { PlusOutlined } from '@ant-design/icons';
-import { DoAddNewUser } from '../../apis/Users/user';
+// import { PlusOutlined } from '@ant-design/icons';
+// import { DoAddNewUser } from '../../apis/Users/user';
 
 const UserManagement = () => {
     const { Title } = Typography;
@@ -68,9 +68,9 @@ const UserManagement = () => {
     };
 
     // Handle modal visibility
-    const showModal = () => {
-        setIsModalVisible(true);
-    };
+    // const showModal = () => {
+    //     setIsModalVisible(true);
+    // };
 
     const handleCancel = () => {
         setIsModalVisible(false);
@@ -117,20 +117,20 @@ const UserManagement = () => {
     };
 
     // Handle page change
-    const onPageChange = (page) => {
-        setCurrentPage(page);
-    };
+    // const onPageChange = (page) => {
+    //     setCurrentPage(page);
+    // };
 
     const columns = [
-        {
-            title: 'No.',
-            dataIndex: 'key',
-            key: 'key',
-            render: (text, record, index) => {
-                // Calculate row number based on current page
-                return (currentPage - 1) * 5 + (index + 1);
-            },
-        },
+        // {
+        //     title: 'No.',
+        //     dataIndex: 'key',
+        //     key: 'key',
+        //     render: (text, record, index) => {
+        //         // Calculate row number based on current page
+        //         return (currentPage - 1) * 5 + (index + 1);
+        //     },
+        // },
         {
             title: 'Full Name',
             dataIndex: 'fullName',

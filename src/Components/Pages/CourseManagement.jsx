@@ -1,7 +1,8 @@
-import { Button, Space, Table, Image, Typography, Input, notification, Modal, Form, Upload, List,Select } from 'antd';
+import { Button, Space, Table, Image, Typography, Input, notification, Modal, Form, Upload, List, Select } from 'antd';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { PlusOutlined } from '@ant-design/icons';
+import { GetAllCourses } from '../../apis/Coures/course';
 
 // Main
 const CourseManagement = () => {
@@ -23,7 +24,7 @@ const CourseManagement = () => {
 
     const [isModalLessonOpen, setIsModalLessonOpen] = useState(false);
     const [category, setcategory] = useState([]);
-    
+
     // useEffect to load data from the API
     useEffect(() => {
         const fetchAllCourses = async () => {
@@ -147,44 +148,44 @@ const CourseManagement = () => {
         }
     };
 
-// Handle Add Lesson
-const handleAddLesson = async () => {
-    if (!selectedCourseId) {
-        notification.error({ message: 'No course selected' });
-        return;
-    }
-    
-    try {
-        const lessonData = await form.validateFields(); // Get the form data
-        const uploadedImageUrl = await handleUpload(); // Upload the image to Cloudinary
+    // Handle Add Lesson
+    const handleAddLesson = async () => {
+        if (!selectedCourseId) {
+            notification.error({ message: 'No course selected' });
+            return;
+        }
 
-        if (!uploadedImageUrl) return;
+        try {
+            const lessonData = await form.validateFields(); // Get the form data
+            const uploadedImageUrl = await handleUpload(); // Upload the image to Cloudinary
 
-        const newLesson = {
-            lessonId: 0, // Lesson ID is 0 for new lessons
-            courseId: selectedCourseId, // Assign selected courseId to the lesson
-            detail: lessonData.detail, // Assign lesson detail from form
-            picture: uploadedImageUrl, // Use the uploaded image URL
-        };
+            if (!uploadedImageUrl) return;
 
-        console.log("check"+ newLesson.courseId);
-        await axios.post('https://localhost:7222/api/Lesson', newLesson); // Call API to add lesson
-        notification.success({ message: 'Lesson added successfully' });
+            const newLesson = {
+                lessonId: 0, // Lesson ID is 0 for new lessons
+                courseId: selectedCourseId, // Assign selected courseId to the lesson
+                detail: lessonData.detail, // Assign lesson detail from form
+                picture: uploadedImageUrl, // Use the uploaded image URL
+            };
 
-        // Close the modal and reset values
-        setIsModalLessonOpen(false);
-        form.resetFields(); // Reset form fields
-        setImageUrl(''); // Reset image URL after adding the lesson
+            console.log("check" + newLesson.courseId);
+            await axios.post('https://localhost:7222/api/Lesson', newLesson); // Call API to add lesson
+            notification.success({ message: 'Lesson added successfully' });
 
-        // Refresh the lesson list for the selected course
-        viewLessons(selectedCourseId, selectedCourseName);
-    } catch (error) {
-        notification.error({
-            message: 'Failed to add lesson',
-            description: error.message,
-        });
-    }
-};
+            // Close the modal and reset values
+            setIsModalLessonOpen(false);
+            form.resetFields(); // Reset form fields
+            setImageUrl(''); // Reset image URL after adding the lesson
+
+            // Refresh the lesson list for the selected course
+            viewLessons(selectedCourseId, selectedCourseName);
+        } catch (error) {
+            notification.error({
+                message: 'Failed to add lesson',
+                description: error.message,
+            });
+        }
+    };
 
 
 
@@ -193,7 +194,7 @@ const handleAddLesson = async () => {
         try {
             const response = await axios.get('https://localhost:7222/api/Category/all-Category');
             setcategory(response.data); // Update state with the fetched categories
-           // console.log(category+"check");
+            // console.log(category+"check");
         } catch (error) {
             notification.error({
                 message: 'Error fetching categories',
@@ -203,73 +204,73 @@ const handleAddLesson = async () => {
     };
 
 
-const columns = [
-    {
-        title: 'Picture',
-        dataIndex: 'picture',
-        key: 'picture',
-        render: (img) => (
-            <Image
-                width={100}
-                src={img ? img : 'https://via.placeholder.com/100'}
-                alt="Course Image"
-            />
-        ),
-    },
-    {
-        title: 'Course Name',
-        dataIndex: 'name',
-        key: 'name',
-        render: (text) => <a>{text}</a>,
-    },
-    {
-        title: 'Teacher',
-        dataIndex: 'createBy',
-        key: 'createBy',
-        render: (text) => <a>{text.trim()}</a>,
-    },
-    {
-        title: 'Time (Hours)',
-        dataIndex: 'timeLearning',
-        key: 'timeLearning',
-        render: (text) => <a>{text}</a>,
-    },
-    {
-        title: 'Money', // New column for Money
-        dataIndex: 'money',
-        key: 'money',
-        render: (text) => <a>{text}</a>, // Adjust as necessary to format the display
-    },
-    {
-        title: 'Category', // New column for Category
-        dataIndex: 'cateId',
-        key: 'cateId',
-        render: (text) => <a>{text}</a>, // Adjust as necessary to format the display
-    },
-    {
-        title: 'Actions',
-        dataIndex: 'action',
-        key: 'action',
-        render: (_, record) => (
-            <Space size="middle">
-                <Button type="primary" onClick={() => viewLessons(record.courseId, record.name)}>
-                    View Lessons
-                </Button>
-                <Button variant="contained" onClick={() => {
-                    setSelectedCourseId(record.courseId);
-                    setIsModalLessonOpen(true);
-                }}>
-                    Add Lesson
-                </Button>
-                <Button danger onClick={() => deleteCourse(record.courseId)}>
-                    Delete
-                </Button>
-            </Space>
-        ),
-    },
-];
+    const columns = [
+        {
+            title: 'Picture',
+            dataIndex: 'picture',
+            key: 'picture',
+            render: (img) => (
+                <Image
+                    width={100}
+                    src={img ? img : 'https://via.placeholder.com/100'}
+                    alt="Course Image"
+                />
+            ),
+        },
+        {
+            title: 'Course Name',
+            dataIndex: 'name',
+            key: 'name',
+            render: (text) => <a>{text}</a>,
+        },
+        {
+            title: 'Teacher',
+            dataIndex: 'createBy',
+            key: 'createBy',
+            render: (text) => <a>{text.trim()}</a>,
+        },
+        {
+            title: 'Time (Hours)',
+            dataIndex: 'timeLearning',
+            key: 'timeLearning',
+            render: (text) => <a>{text}</a>,
+        },
+        {
+            title: 'Money', // New column for Money
+            dataIndex: 'money',
+            key: 'money',
+            render: (text) => <a>{text}</a>, // Adjust as necessary to format the display
+        },
+        {
+            title: 'Category', // New column for Category
+            dataIndex: 'cateId',
+            key: 'cateId',
+            render: (text) => <a>{text}</a>, // Adjust as necessary to format the display
+        },
+        {
+            title: 'Actions',
+            dataIndex: 'action',
+            key: 'action',
+            render: (_, record) => (
+                <Space size="middle">
+                    <Button type="primary" onClick={() => viewLessons(record.courseId, record.name)}>
+                        View Lessons
+                    </Button>
+                    <Button variant="contained" onClick={() => {
+                        setSelectedCourseId(record.courseId);
+                        setIsModalLessonOpen(true);
+                    }}>
+                        Add Lesson
+                    </Button>
+                    <Button danger onClick={() => deleteCourse(record.courseId)}>
+                        Delete
+                    </Button>
+                </Space>
+            ),
+        },
+    ];
 
-// Rest of your component code...
+    // Rest of your component code...
 
 
     const uploadProps = {
@@ -298,82 +299,82 @@ const columns = [
                     style={{ margin: '20px 20px 20px 0px', width: '33%' }}
                 />
                 <div>
-                <Button type="primary" onClick={() => setIsModalOpen(true)}>
-                    Add Course
-                </Button>
-               
-                </div>               
+                    <Button type="primary" onClick={() => setIsModalOpen(true)}>
+                        Add Course
+                    </Button>
+
+                </div>
             </div>
             <br />
             <Table columns={columns} dataSource={filteredCourses} rowKey="courseId" />
 
             {/* Add Course Modal */}
             <Modal
-            title="Add New Course"
-            open={isModalOpen}
-            onCancel={() => setIsModalOpen(false)}
-            onOk={handleAddCourse}
-        >
-            <Form form={form} layout="vertical">
-                <Form.Item
-                    name="name"
-                    label="Course Name"
-                    rules={[{ required: true, message: 'Please input the course name!' }]}
-                >
-                    <Input placeholder="Enter course name" />
-                </Form.Item>
-                <Form.Item
-                    name="createBy"
-                    label="Teacher"
-                    rules={[{ required: true, message: 'Please input the teacher name!' }]}
-                >
-                    <Input placeholder="Enter teacher name" />
-                </Form.Item>
-                <Form.Item
-                    name="timeLearning"
-                    label="Time (Hours)"
-                    rules={[{ required: true, message: 'Please input the learning time!' }]}
-                >
-                    <Input type="number" placeholder="Enter time in hours" />
-                </Form.Item>
-                <Form.Item
+                title="Add New Course"
+                open={isModalOpen}
+                onCancel={() => setIsModalOpen(false)}
+                onOk={handleAddCourse}
+            >
+                <Form form={form} layout="vertical">
+                    <Form.Item
+                        name="name"
+                        label="Course Name"
+                        rules={[{ required: true, message: 'Please input the course name!' }]}
+                    >
+                        <Input placeholder="Enter course name" />
+                    </Form.Item>
+                    <Form.Item
+                        name="createBy"
+                        label="Teacher"
+                        rules={[{ required: true, message: 'Please input the teacher name!' }]}
+                    >
+                        <Input placeholder="Enter teacher name" />
+                    </Form.Item>
+                    <Form.Item
+                        name="timeLearning"
+                        label="Time (Hours)"
+                        rules={[{ required: true, message: 'Please input the learning time!' }]}
+                    >
+                        <Input type="number" placeholder="Enter time in hours" />
+                    </Form.Item>
+                    <Form.Item
                         name="price"
                         label="Price ($)" // Added Price Field in Form
                         rules={[{ required: true, message: 'Please input the price!' }]}
                     >
                         <Input type="number" placeholder="Enter course price" />
                     </Form.Item>
-                <Form.Item
-                name="cateId"
-                label="Category"
-                rules={[{ required: true, message: 'Please select a category!' }]}>
-                <Select placeholder="Select a category">
-                    {category.length > 0 ? (
-                        category.map(cat => (
-                            <Select.Option key={cat.idcategory} value={cat.idcategory}>
-                                {cat.name}
-                            </Select.Option>
-                        ))
-                    ) : (
-                        <Select.Option disabled>No categories available</Select.Option>
-                    )}
-                </Select>
-            </Form.Item>
-                <Form.Item label="Picture">
-                    <Upload {...uploadProps} listType="picture-card">
-                        {imageUrl ? (
-                            <img src={imageUrl} alt="course" style={{ width: '100%' }} />
-                        ) : (
-                            <div>
-                                <PlusOutlined />
-                                <div style={{ marginTop: 8 }}>Upload</div>
-                            </div>
-                        )}
-                    </Upload>
-                </Form.Item>
-            </Form>
-        </Modal>
- 
+                    <Form.Item
+                        name="cateId"
+                        label="Category"
+                        rules={[{ required: true, message: 'Please select a category!' }]}>
+                        <Select placeholder="Select a category">
+                            {category.length > 0 ? (
+                                category.map(cat => (
+                                    <Select.Option key={cat.idcategory} value={cat.idcategory}>
+                                        {cat.name}
+                                    </Select.Option>
+                                ))
+                            ) : (
+                                <Select.Option disabled>No categories available</Select.Option>
+                            )}
+                        </Select>
+                    </Form.Item>
+                    <Form.Item label="Picture">
+                        <Upload {...uploadProps} listType="picture-card">
+                            {imageUrl ? (
+                                <img src={imageUrl} alt="course" style={{ width: '100%' }} />
+                            ) : (
+                                <div>
+                                    <PlusOutlined />
+                                    <div style={{ marginTop: 8 }}>Upload</div>
+                                </div>
+                            )}
+                        </Upload>
+                    </Form.Item>
+                </Form>
+            </Modal>
+
             {/* View Lessons Modal */}
             <Modal
                 title={`Lessons for ${selectedCourseName}`}
@@ -381,7 +382,7 @@ const columns = [
                 onCancel={() => setIsLessonModalOpen(false)}
                 footer={null}
                 width={800}
-            >                           
+            >
                 <List
                     itemLayout="vertical"
                     size="large"
@@ -414,34 +415,34 @@ const columns = [
 
 
             <Modal
-    title="Add New Lesson"
-    open={isModalLessonOpen}
-    onCancel={() => setIsModalLessonOpen(false)}
-    onOk={handleAddLesson}
->
-    <Form form={form} layout="vertical">
-        <Form.Item
-            name="detail"
-            label="Detail"
-            rules={[{ required: true, message: 'Please input the detail for the lesson!' }]}
-        >
-            <Input placeholder="Enter Detail" />
-        </Form.Item>
+                title="Add New Lesson"
+                open={isModalLessonOpen}
+                onCancel={() => setIsModalLessonOpen(false)}
+                onOk={handleAddLesson}
+            >
+                <Form form={form} layout="vertical">
+                    <Form.Item
+                        name="detail"
+                        label="Detail"
+                        rules={[{ required: true, message: 'Please input the detail for the lesson!' }]}
+                    >
+                        <Input placeholder="Enter Detail" />
+                    </Form.Item>
 
-        <Form.Item label="Picture">
-            <Upload {...uploadProps} listType="picture-card">
-                {imageUrl ? (
-                    <img src={imageUrl} alt="lesson" style={{ width: '100%' }} />
-                ) : (
-                    <div>
-                        <PlusOutlined />
-                        <div style={{ marginTop: 8 }}>Upload</div>
-                    </div>
-                )}
-            </Upload>
-        </Form.Item>
-    </Form>
-    </Modal>
+                    <Form.Item label="Picture">
+                        <Upload {...uploadProps} listType="picture-card">
+                            {imageUrl ? (
+                                <img src={imageUrl} alt="lesson" style={{ width: '100%' }} />
+                            ) : (
+                                <div>
+                                    <PlusOutlined />
+                                    <div style={{ marginTop: 8 }}>Upload</div>
+                                </div>
+                            )}
+                        </Upload>
+                    </Form.Item>
+                </Form>
+            </Modal>
 
         </>
     );
