@@ -11,15 +11,18 @@ const UserProfile = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             const token = localStorage.getItem('accessToken');
-            // console.log("Token:", token);
+            console.log("Token:", token);
 
             if (token) {
                 const userInfoToken = jwtDecode(token); // Decode the JWT
+                // console.log('====================================');
+                // console.log("userInfoToken", userInfoToken);
+                // console.log('====================================');
                 const userInfoById = await GetUserById(userInfoToken.UserId); // Fetch user info by ID
+                console.log('====================================');
+                console.log("userInfoById", userInfoById);
+                console.log('====================================');
                 setUserInfo(userInfoById?.data);
-                // console.log('====================================');
-                // console.log("userInfo", userInfoById);
-                // console.log('====================================');
             }
         };
 

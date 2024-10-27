@@ -77,8 +77,6 @@ const CourseManagement = () => {
             title: 'Picture',
             dataIndex: 'picture',
             key: 'picture',
-            dataIndex: 'picture',
-            key: 'picture',
             render: (img) => (
                 <Image
                     width={100}
