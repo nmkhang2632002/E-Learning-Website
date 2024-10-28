@@ -40,6 +40,8 @@ import Dashboard from "./Components/Pages/Dashboard";
 import CouresManagement from "./Components/Pages/CourseManagement";
 import Checkout from "./Components/Pages/Checkout";
 import CourseLesson from "./Components/Course/CourseLesson";
+import UserProfile from "./Components/profile/UserProfile";
+import UserCourse from "./Components/profile/UserCourse";
 
 function App() {
   return (
