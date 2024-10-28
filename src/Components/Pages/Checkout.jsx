@@ -1,29 +1,37 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import api from "../../utils/axios-custom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAccount } from "../../redux/slice/accountSlice";
 
 const Checkout = () => {
   const [paypalClientId, setPaypalClientId] = useState(
     "Ae4QUDSIYQBgDP21YokxKKBkyq9rsAVwcVPiayrkzYuw5YcVmKuVbGanrMyMvggLX9aqjYU5l7ImGdBv"
   );
-  const [deliveryAddress, setDeliveryAddress] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [totalMoney, setTotalMoney] = useState(100);
+  const { user } = useAccount();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const data = location.state;
+  const totalMoney = data?.totalMoney;
+  const courseId = data?.courseId;
+  // const [deliveryAddress, setDeliveryAddress] = useState("");
+  // const [phoneNumber, setPhoneNumber] = useState("");
   const [notification, setNotification] = useState("");
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await axios.get("/api/checkout-data");
-        setDeliveryAddress(result.data.deliveryAddress);
-        setPhoneNumber(result.data.phoneNumber);
-        setTotalMoney(result.data.totalMoney);
-      } catch (error) {
-        console.error("Error fetching checkout data:", error);
-        setNotification("Failed to load checkout data.");
-      }
-    };
+    // const fetchData = async () => {
+    //   try {
+    //     const result = await api.get("/api/checkout-data");
+    //     setDeliveryAddress(result.data.deliveryAddress);
+    //     setPhoneNumber(result.data.phoneNumber);
+    //     setTotalMoney(result.data.totalMoney);
+    //   } catch (error) {
+    //     console.error("Error fetching checkout data:", error);
+    //     setNotification("Failed to load checkout data.");
+    //   }
+    // };
 
-    fetchData();
-
+    // fetchData();
+    // /api/UserCourse/get-all-UserCourse
     const script = document.createElement("script");
     script.src = `https://www.paypal.com/sdk/js?client-id=${paypalClientId}&currency=USD`;
     script.onload = () => {
@@ -31,15 +39,9 @@ const Checkout = () => {
         .Buttons({
           createOrder: async () => {
             try {
-              const response = await axios.post(
-                "https://c0b9-14-191-223-23.ngrok-free.app/api/Paypal/create-order",
-                { amount: totalMoney },
-                {
-                  headers: {
-                    "ngrok-skip-browser-warning": "true",
-                  },
-                }
-              );
+              const response = await api.post("/api/Paypal/create-order", {
+                amount: data?.totalMoney,
+              });
               return response.data.orderID; // Trả về order ID
             } catch (error) {
               console.error("Error creating order:", error);
@@ -49,18 +51,17 @@ const Checkout = () => {
           },
           onApprove: async (data) => {
             try {
-              console.log(data.orderID + " check orderID");
-              const response = await axios.post(
-                "https://c0b9-14-191-223-23.ngrok-free.app/api/Paypal",
-                { orderID: data.orderID },
-                {
-                  headers: {
-                    "ngrok-skip-browser-warning": "true",
-                  },
-                }
-              );
+              const response = await api.post("/api/Paypal", {
+                orderID: data.orderID,
+              });
               if (response.data === "Successs") {
-                setNotification("The order is created successfully!");
+                const response = await api.post(
+                  `/api/UserCourse/add-UserToCourse?Courseid=${courseId}&UserID=${user?.UserId}`
+                );
+                if (response.data) {
+                  setNotification("The order is created successfully!");
+                  navigate("/courses");
+                }
               } else {
                 setNotification("Failed to create the order!");
               }
@@ -89,7 +90,7 @@ const Checkout = () => {
     return () => {
       document.body.removeChild(script);
     };
-  }, [paypalClientId, totalMoney]);
+  }, [paypalClientId]);
 
   return (
     <div className="p-5" style={{ backgroundColor: "#08618d" }}>

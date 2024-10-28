@@ -14,14 +14,6 @@ import axios from "axios";
 import api from "../../utils/axios-custom";
 
 export default function Home() {
-  const getData = async () => {
-    const response = await api.get("/api/lesson"); // Add your API URL here
-    const data = await response.data;
-    console.log(data);
-  };
-  useEffect(() => {
-    getData();
-  }, []);
   return (
     <>
       <Spinner />

@@ -6,8 +6,8 @@ import { GetAllCourses } from '../../apis/Coures/course';
 
 // Main
 const CourseManagement = () => {
-    const { Search } = Input;
-    const { Title } = Typography;
+  const { Search } = Input;
+  const { Title } = Typography;
 
     // useState
     const [getAllCourses, setGetAllCourses] = useState([]);
