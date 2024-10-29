@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { Modal, Button, Card, Space, QRCode, notification } from "antd";
-import { useSelector } from "react-redux";
-import { useAccount } from "../../redux/slice/accountSlice";
+import { Button, Card, Modal, QRCode, Space } from "antd";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAccount } from "../../redux/slice/accountSlice";
+import api from "../../utils/axios-custom";
 
 export default function Coursestructure({ course }) {
   const navigate = useNavigate();
@@ -19,6 +19,19 @@ export default function Coursestructure({ course }) {
 
   const handleCancel = () => {
     setIsModalVisible(false);
+  };
+
+  const handlePayment = async () => {
+    const response = await api.post("/api/Payment/add-Payment", {
+      userId: user.UserId,
+      money: 15000,
+      title: "Payment for course",
+    });
+    const url = await response.data;
+    localStorage.setItem("courseId", JSON.stringify(course?.courseId));
+    if (url) {
+      window.location = url;
+    }
   };
 
   useEffect(() => {
@@ -61,12 +74,7 @@ export default function Coursestructure({ course }) {
                     if (!user.UserId) {
                       navigate("/signin");
                     } else {
-                      navigate("/Pay", {
-                        state: {
-                          totalMoney: course.money,
-                          courseId: course.courseId,
-                        },
-                      });
+                      handlePayment();
                     }
                   }}
                 >

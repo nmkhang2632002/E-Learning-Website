@@ -1,0 +1,119 @@
+.payment-success-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f0f0f0;
+  padding: 20px;
+}
+
+.success-card {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  padding: 24px;
+}
+
+.card-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.success-icon {
+  color: #10b981;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 16px;
+}
+
+.success-title {
+  color: #10b981;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin: 0;
+}
+
+.success-message {
+  text-align: center;
+  color: #4b5563;
+  margin-bottom: 24px;
+}
+
+.order-details {
+  background-color: #f9fafb;
+  border-radius: 4px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.details-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.details-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.details-list li {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.detail-label {
+  color: #6b7280;
+}
+
+.detail-value {
+  font-weight: 500;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: center;
+}
+
+.home-button {
+  display: inline-flex;
+  align-items: center;
+  background-color: #3b82f6;
+  color: #ffffff;
+  padding: 10px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.home-button:hover {
+  background-color: #2563eb;
+}
+
+.home-icon {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+}
+
+@media (max-width: 480px) {
+  .success-card {
+    padding: 16px;
+  }
+
+  .success-title {
+    font-size: 20px;
+  }
+
+  .details-title {
+    font-size: 16px;
+  }
+}

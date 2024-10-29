@@ -1,53 +1,57 @@
+import { Navigate, Route, Routes } from "react-router-dom";
 import "./input.css";
-import { Routes, Route, Navigate } from "react-router-dom";
 
+import Advjava from "./Components/Course/Advjava";
+import Css from "./Components/Course/Css";
+import Dsa from "./Components/Course/Dsa";
+import Express from "./Components/Course/Express";
+import Fullstack from "./Components/Course/Fullstack";
+import Html from "./Components/Course/Html";
+import Javaprog from "./Components/Course/Javaprog";
+import Javascript from "./Components/Course/Javascript";
+import Mern from "./Components/Course/Mern";
+import Mongodb from "./Components/Course/Mongodb";
+import Mysql from "./Components/Course/Mysql";
+import Nodejs from "./Components/Course/Nodejs";
+import Programming from "./Components/Course/Programming";
+import Reactjs from "./Components/Course/Reactjs";
+import BotpressChatbot from "./Components/Ebook/BotpressChatbot";
+import ShowBook from "./Components/Ebook/ShowBook";
+import ErrorPage from "./Components/Pages/ErrorPage";
 import Home from "./Components/Pages/Home";
+import Profile from "./Components/Pages/Profile";
+import SignUp from "./Components/Pages/Register";
+import Sign from "./Components/Pages/Sign";
+import Test from "./Components/Pages/Test";
+import FullstackQuiz from "./Components/Quiz/FullstackQuiz";
+import JavaQuiz from "./Components/Quiz/JavaQuiz";
+import JavascriptQuiz from "./Components/Quiz/JavascriptQuiz";
+import ReactQuiz from "./Components/Quiz/ReactQuiz";
 import About1 from "./Components/Routes/About1";
+import Contact1 from "./Components/Routes/Contact1";
 import Courses1 from "./Components/Routes/Courses1";
 import Team1 from "./Components/Routes/Team1";
 import Testimonial1 from "./Components/Routes/Testimonial1";
-import Contact1 from "./Components/Routes/Contact1";
-import ErrorPage from "./Components/Pages/ErrorPage";
-import Sign from "./Components/Pages/Sign";
-import SignUp from "./Components/Pages/Register";
-import Javaprog from "./Components/Course/Javaprog";
-import Dsa from "./Components/Course/Dsa";
-import Mern from "./Components/Course/Mern";
-import Fullstack from "./Components/Course/Fullstack";
-import Programming from "./Components/Course/Programming";
-import ShowBook from "./Components/Ebook/ShowBook";
-import BotpressChatbot from "./Components/Ebook/BotpressChatbot";
-import Reactjs from "./Components/Course/Reactjs";
-import Express from "./Components/Course/Express";
-import Nodejs from "./Components/Course/Nodejs";
-import Mongodb from "./Components/Course/Mongodb";
-import Mysql from "./Components/Course/Mysql";
-import Javascript from "./Components/Course/Javascript";
-import Html from "./Components/Course/Html";
-import Css from "./Components/Course/Css";
-import Advjava from "./Components/Course/Advjava";
-import JavaQuiz from "./Components/Quiz/JavaQuiz";
-import Test from "./Components/Pages/Test";
-import FullstackQuiz from "./Components/Quiz/FullstackQuiz";
-import JavascriptQuiz from "./Components/Quiz/JavascriptQuiz";
-import ReactQuiz from "./Components/Quiz/ReactQuiz";
-import Profile from "./Components/Pages/Profile";
 // import Feedback from "./Components/Pages/Feedback";
-import FeedbackAll from "./Components/Pages/FeedbackAll";
-import UserManagement from "./Components/Pages/UserManagement";
-import Admin from "./Components/Routes/admin";
-import Dashboard from "./Components/Pages/Dashboard";
-import CouresManagement from "./Components/Pages/CourseManagement";
-import Checkout from "./Components/Pages/Checkout";
 import CourseLesson from "./Components/Course/CourseLesson";
-import UserProfile from "./Components/profile/UserProfile";
+import Checkout from "./Components/Pages/Checkout";
+import CouresManagement from "./Components/Pages/CourseManagement";
+import Dashboard from "./Components/Pages/Dashboard";
+import FeedbackAll from "./Components/Pages/FeedbackAll";
+
+import UserManagement from "./Components/Pages/UserManagement";
 import UserCourse from "./Components/profile/UserCourse";
+import UserProfile from "./Components/profile/UserProfile";
+import Admin from "./Components/Routes/admin";
+import PaymentSuccess from "./Components/Pages/PaymentSuccess";
+import PaymentFail from "./Components/Pages/PaymentFail";
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<Home />} />
+
         <Route path="/about" element={<About1 />} />
         <Route path="/courses" element={<Courses1 />} />
         <Route path="/team" element={<Team1 />} />
@@ -60,7 +64,7 @@ function App() {
         <Route path="/register" element={<SignUp />} />
 
         {/* Profile User Route */}
-        <Route path="/profile" element={<Profile />} >
+        <Route path="/profile" element={<Profile />}>
           <Route index element={<Navigate to="/profile/info" />} />
 
           <Route path="/profile/info" element={<UserProfile />} />
@@ -100,7 +104,8 @@ function App() {
           path="/cources/programming/javascript"
           element={<Javascript />}
         />
-
+        <Route path="/payment-success" element={<PaymentSuccess />} />
+        <Route path="/payment-fail" element={<PaymentFail />} />
         <Route path="/library" element={<ShowBook />} />
         {/* <Route path="/feedback/new" element={<Feedback />} /> */}
         <Route path="/feedback" element={<FeedbackAll />} />
@@ -122,6 +127,7 @@ function App() {
 
         <Route path="*" element={<ErrorPage />} />
       </Routes>
+
       <BotpressChatbot />
     </>
   );

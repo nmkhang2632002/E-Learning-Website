@@ -7,18 +7,18 @@ import { doLoginAction } from "../../redux/slice/accountSlice";
 import api from "../../utils/axios-custom";
 import Footer from "./Footer";
 import Navbar from "./Navbar";
+import { toast } from "react-toastify";
 
 export default function Sign() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   // Login API Function
   const onFinish = async (values) => {
     const { email, password } = values;
 
     try {
       const response = await api.post(
-        `/Authorize/Login?email=${email}&password=${password}`
+        `api/Authorize/Login?email=${email}&password=${password}`
       );
       const data = await response.data.data;
       if (data) {
@@ -27,20 +27,14 @@ export default function Sign() {
         dispatch(doLoginAction(user));
         if (user.role === "admin" || user.role === "instructor") {
           navigate("/admin");
-          notification.success({
-            message: "Login Successfully",
-          });
+          toast.success("Login Success");
         } else {
           navigate("/");
         }
-      } else {
-        notification.error({
-          message: "Login Failed",
-          description: "Incorrect email or password. Please try again.",
-        });
       }
     } catch (error) {
       console.error("Error fetching checkout data:", error);
+      toast.error("Login Failed");
     }
   };
 

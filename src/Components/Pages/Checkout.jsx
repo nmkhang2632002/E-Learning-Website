@@ -60,7 +60,7 @@ const Checkout = () => {
                 );
                 if (response.data) {
                   setNotification("The order is created successfully!");
-                  navigate("/courses");
+                  navigate(`/courses/${courseId}/lesson`);
                 }
               } else {
                 setNotification("Failed to create the order!");

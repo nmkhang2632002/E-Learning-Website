@@ -4,6 +4,7 @@ import Navbar from "../Pages/Navbar";
 import { useParams } from "react-router-dom";
 import api from "../../utils/axios-custom";
 import { Progress } from "antd";
+import { useAccount } from "../../redux/slice/accountSlice";
 
 export default function Sidebar() {
   const { couserId } = useParams();
@@ -11,6 +12,8 @@ export default function Sidebar() {
   const [activeItem, setActiveItem] = useState();
   const [progress, setProgress] = useState(0);
   const [lessonLearned, setLessonLearned] = useState();
+  const [userCourse, setUserCourse] = useState();
+  const account = useAccount();
   const fetchData = async () => {
     try {
       const response = await api.get(`/api/Lesson/Course/${couserId}`);
@@ -21,7 +24,6 @@ export default function Sidebar() {
         }));
         setLessons(data);
         setActiveItem(data[0]);
-        setProgress(0); // Initialize progress
         setLessonLearned([data[0].lessonId]);
       }
     } catch (error) {
@@ -29,25 +31,64 @@ export default function Sidebar() {
     }
   };
 
+  const fetchAllUserCourse = async () => {
+    const getAllPusrchase = await api.get("/api/UserCourse/get-all-UserCourse");
+    const purchasedCourse = await getAllPusrchase.data;
+    if (purchasedCourse) {
+      const userCourse = purchasedCourse.find(
+        (coursePurchased) =>
+          coursePurchased.courseId === parseInt(couserId) &&
+          coursePurchased.userId === account.user.UserId
+      );
+      setUserCourse(userCourse);
+    }
+  };
+
   useEffect(() => {
     fetchData();
+    fetchAllUserCourse();
   }, [couserId]);
 
   useEffect(() => {
-    if (lessons.length > 0 && activeItem) {
-      const currentIndex = lessons.findIndex(
-        (lesson) => lesson.lessonId === activeItem.lessonId
-      );
-      setProgress(((currentIndex + 1) / lessons.length) * 100);
+    if (userCourse?.certificate) {
+      setProgress(100);
     }
-  }, [lessons]);
+  }, [userCourse]);
+
+  useEffect(() => {
+    if (userCourse?.certificate) return;
+    if (lessons?.length > 0 && lessonLearned?.length > 0) {
+      setProgress((lessonLearned?.length / lessons.length) * 100);
+    }
+  }, [lessons?.length, lessonLearned?.length]);
+
+  const handleFinishCourse = async () => {
+    if (progress === 100 && userCourse?.certificate === false) {
+      try {
+        if (userCourse) {
+          const response = await api.post(
+            `/api/UserCourse/edit-UserCourse-Certificate?UserCourseId=${userCourse?.id}`
+          );
+          if (response.data) {
+            alert("Course completed");
+          }
+        }
+      } catch (error) {
+        console.error("Error complete course:", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    handleFinishCourse();
+  }, [progress]);
 
   const handleLessonClick = (lesson) => {
     setActiveItem(lesson);
+    if (userCourse.certificate) return;
     const lessonId = lessonLearned.find((item) => item === lesson.lessonId);
     if (lessonId) return;
     setLessonLearned([...lessonLearned, lesson.lessonId]);
-    setProgress((lessonLearned / lessons.length) * 100);
   };
 
   return (
