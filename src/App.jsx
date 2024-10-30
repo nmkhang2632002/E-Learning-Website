@@ -43,6 +43,7 @@ import CourseLesson from "./Components/Course/CourseLesson";
 import UserProfile from "./Components/profile/UserProfile";
 import UserCourse from "./Components/profile/UserCourse";
 import PaymentPage from "./Components/Pages/PaymentPage";
+import UserPaypal from "./Components/Pages/UserPaypal";
 function App() {
   return (
     <>
@@ -65,6 +66,7 @@ function App() {
 
           <Route path="/profile/info" element={<UserProfile />} />
           <Route path="/profile/course" element={<UserCourse />} />
+          <Route path="/profile/paypal" element={<UserPaypal />} />
         </Route>
 
         <Route path="/test" element={<Test />} />
