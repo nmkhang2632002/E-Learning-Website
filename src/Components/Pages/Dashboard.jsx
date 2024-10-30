@@ -46,7 +46,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await axios.get('https://localhost:7222/api/User');
+        const response = await axios.get('http://localhost:5279/api/User');
         // console.error('  data :', response.data);
 
         setCourses(response.data); // Set the courses data to state

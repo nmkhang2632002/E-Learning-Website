@@ -26,7 +26,7 @@ const UserManagement = () => {
     useEffect(() => {
         const fetchAccounts = async () => {
             try {
-                const response = await axios.get('https://localhost:7222/api/User');
+                const response = await axios.get('http://localhost:5279/api/User');
                 setAccounts(response.data);
                 setFilteredAccounts(response.data);
             } catch (error) {
@@ -79,7 +79,7 @@ const UserManagement = () => {
     // Handle adding new user
     const handleAddUser = async () => {
         try {
-            const response = await axios.post('https://localhost:7222/api/User', newUser);
+            const response = await axios.post('http://localhost:5279/api/User', newUser);
             setAccounts([...accounts, response.data]); // Add the new user to the list
             setFilteredAccounts([...accounts, response.data]); // Update filtered accounts
             notification.success({
@@ -99,7 +99,7 @@ const UserManagement = () => {
     // Delete An Account
     const deleteAccount = async (id) => {
         try {
-            await axios.delete(`https://localhost:7222/api/User/${id}`); 
+            await axios.delete(`http://localhost:5279/api/User/${id}`); 
             const updatedAccounts = accounts.filter(account => account.userId !== id);
             setAccounts(updatedAccounts);
             setFilteredAccounts(updatedAccounts); // Update filtered list after deletion

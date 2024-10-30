@@ -109,6 +109,14 @@ const Admin = () => {
               Course Management
             </Link>
           </Menu.Item>
+          <Menu.Item key="3" icon={<ContainerOutlined />}>
+            <Link
+              style={{ textDecoration: "none" }}
+              to="/admin/admin_payment"
+            >
+              Payment
+            </Link>
+          </Menu.Item>
         </Menu>
       </Sider>
 

@@ -61,7 +61,7 @@ const CourseManagement = () => {
     // Delete a course
     const deleteCourse = async (courseId) => {
         try {
-            await axios.delete(`https://localhost:7222/api/Course/delete-course/${courseId}`);
+            await axios.delete(`http://localhost:5279/api/Course/delete-course/${courseId}`);
             const updatedCourses = getAllCourses.filter(course => course.courseId !== courseId);
             setGetAllCourses(updatedCourses); // Update state
             setFilteredCourses(updatedCourses); // Also update filtered state
@@ -118,7 +118,7 @@ const CourseManagement = () => {
                 picture: uploadedImageUrl,
                 createDate: new Date().toISOString(), // Automatically set the current date
             };
-            await axios.post('https://localhost:7222/api/Course/add-course', newCourse);
+            await axios.post('http://localhost:5279/api/Course/add-course', newCourse);
             notification.success({
                 message: 'Course added successfully',
             });
@@ -137,7 +137,7 @@ const CourseManagement = () => {
     const viewLessons = async (courseId, courseName) => {
         setSelectedCourseName(courseName);
         try {
-            const response = await axios.get(`https://localhost:7222/api/Lesson/Course/${courseId}`);
+            const response = await axios.get(`http://localhost:5279/api/Lesson/Course/${courseId}`);
             setLessons(response.data);
             setIsLessonModalOpen(true);
         } catch (error) {
@@ -169,7 +169,7 @@ const CourseManagement = () => {
             };
 
             console.log("check" + newLesson.courseId);
-            await axios.post('https://localhost:7222/api/Lesson', newLesson); // Call API to add lesson
+            await axios.post('http://localhost:5279/api/Lesson', newLesson); // Call API to add lesson
             notification.success({ message: 'Lesson added successfully' });
 
             // Close the modal and reset values
@@ -192,7 +192,7 @@ const CourseManagement = () => {
     // Fetch categories from API
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('https://localhost:7222/api/Category/all-Category');
+            const response = await axios.get('http://localhost:5279/api/Category/all-Category');
             setcategory(response.data); // Update state with the fetched categories
             // console.log(category+"check");
         } catch (error) {

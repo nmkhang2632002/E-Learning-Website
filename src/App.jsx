@@ -42,7 +42,7 @@ import Checkout from "./Components/Pages/Checkout";
 import CourseLesson from "./Components/Course/CourseLesson";
 import UserProfile from "./Components/profile/UserProfile";
 import UserCourse from "./Components/profile/UserCourse";
-
+import PaymentPage from "./Components/Pages/PaymentPage";
 function App() {
   return (
     <>
@@ -117,6 +117,10 @@ function App() {
           <Route
             path="/admin/course-management"
             element={<CouresManagement />}
+          />
+            <Route
+            path="/admin/admin_payment"
+            element={<PaymentPage />}
           />
         </Route>
 
