@@ -34,13 +34,16 @@ export default function Profile() {
                       <Menu.Item key="2">
                         <Link className='text-decoration-none' to="/profile/course">Course</Link>
                       </Menu.Item>
+                      <Menu.Item key="3">
+                        <Link className='text-decoration-none' to="/profile/paypal">Paypal</Link>
+                      </Menu.Item>
                     </Menu.SubMenu>
 
-                    <Menu.Item key="3" icon={<SettingOutlined />}>
+                    <Menu.Item key="4" icon={<SettingOutlined />}>
                       <Link className='text-decoration-none' to="#">Change Password</Link>
                     </Menu.Item>
 
-                    <Menu.Item key="4" icon={<SettingOutlined />}>
+                    <Menu.Item key="5" icon={<SettingOutlined />}>
                       <Link className='text-decoration-none' to="#">Setting</Link>
                     </Menu.Item>
                   </Menu>

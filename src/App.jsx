@@ -45,7 +45,8 @@ import UserProfile from "./Components/profile/UserProfile";
 import Admin from "./Components/Routes/admin";
 import PaymentSuccess from "./Components/Pages/PaymentSuccess";
 import PaymentFail from "./Components/Pages/PaymentFail";
-
+import PaymentPage from "./Components/Pages/PaymentPage";
+import UserPaypal from "./Components/Pages/UserPaypal";
 function App() {
   return (
     <>
@@ -69,6 +70,7 @@ function App() {
 
           <Route path="/profile/info" element={<UserProfile />} />
           <Route path="/profile/course" element={<UserCourse />} />
+          <Route path="/profile/paypal" element={<UserPaypal />} />
         </Route>
 
         <Route path="/test" element={<Test />} />
@@ -123,6 +125,7 @@ function App() {
             path="/admin/course-management"
             element={<CouresManagement />}
           />
+          <Route path="/admin/admin_payment" element={<PaymentPage />} />
         </Route>
 
         <Route path="*" element={<ErrorPage />} />

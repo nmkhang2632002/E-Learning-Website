@@ -16,7 +16,7 @@ import {
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { doLogoutAction, useAccount } from "../../../redux/slice/accountSlice";
-
+import CreditScoreIcon from '@mui/icons-material/CreditScore';
 const { Content, Sider } = Layout;
 
 const Admin = () => {
@@ -107,6 +107,14 @@ const Admin = () => {
               to="/admin/course-management"
             >
               Course Management
+            </Link>
+          </Menu.Item>
+          <Menu.Item key="4" icon={<CreditScoreIcon />}>
+            <Link
+              style={{ textDecoration: "none" }}
+              to="/admin/admin_payment"
+            >
+              Payment
             </Link>
           </Menu.Item>
         </Menu>
