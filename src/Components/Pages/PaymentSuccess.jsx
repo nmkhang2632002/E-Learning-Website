@@ -5,8 +5,8 @@ import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import "../../assets/css/PaymentSuccessPage.css";
 import { doLoginAction } from "../../redux/slice/accountSlice";
-import api from "../../utils/axios-custom copy";
 import Navbar from "./Navbar";
+import api from "../../utils/axios-custom";
 const PaymentSuccess = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -16,7 +16,7 @@ const PaymentSuccess = () => {
   const addToCourseApi = async () => {
     const courseId = JSON.parse(localStorage.getItem("courseId"));
     const response = await api.post(
-      `/api/UserCourse/add-UserToCourse?Courseid=${courseId}&UserID=${user?.UserId}`
+      `UserCourse/add-UserToCourse?Courseid=${courseId}&UserID=${user?.UserId}`
     );
     if (response.data) {
       localStorage.removeItem("courseId");

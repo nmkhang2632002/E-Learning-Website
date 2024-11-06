@@ -16,7 +16,7 @@ export default function Sidebar() {
   const account = useAccount();
   const fetchData = async () => {
     try {
-      const response = await api.get(`/api/Lesson/Course/${couserId}`);
+      const response = await api.get(`Lesson/Course/${couserId}`);
       if (response.data) {
         const data = response.data.map((lesson, index) => ({
           ...lesson,
@@ -32,7 +32,7 @@ export default function Sidebar() {
   };
 
   const fetchAllUserCourse = async () => {
-    const getAllPusrchase = await api.get("/api/UserCourse/get-all-UserCourse");
+    const getAllPusrchase = await api.get("UserCourse/get-all-UserCourse");
     const purchasedCourse = await getAllPusrchase.data;
     if (purchasedCourse) {
       const userCourse = purchasedCourse.find(
@@ -67,7 +67,7 @@ export default function Sidebar() {
       try {
         if (userCourse) {
           const response = await api.post(
-            `/api/UserCourse/edit-UserCourse-Certificate?UserCourseId=${userCourse?.id}`
+            `UserCourse/edit-UserCourse-Certificate?UserCourseId=${userCourse?.id}`
           );
           if (response.data) {
             alert("Course completed");

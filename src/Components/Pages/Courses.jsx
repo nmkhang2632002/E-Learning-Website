@@ -9,11 +9,9 @@ export default function Cources() {
   const { user } = useAccount();
   const getAllCourse = async () => {
     try {
-      const resCourse = await api.get("/api/Course/all-course");
-      const resCategory = await api.get("/api/Category/all-Category");
-      const getAllPusrchase = await api.get(
-        "/api/UserCourse/get-all-UserCourse"
-      );
+      const resCourse = await api.get("Course/all-course");
+      const resCategory = await api.get("Category/all-Category");
+      const getAllPusrchase = await api.get("UserCourse/get-all-UserCourse");
       const courseData = await resCourse.data;
       const categoryData = await resCategory.data;
       const allCourseByCategory = categoryData.map((category) => {

@@ -22,7 +22,7 @@ export default function Coursestructure({ course }) {
   };
 
   const handlePayment = async () => {
-    const response = await api.post("/api/Payment/add-Payment", {
+    const response = await api.post("Payment/add-Payment", {
       userId: user.UserId,
       money: 15000,
       title: "Payment for course",
