@@ -74,7 +74,7 @@ const CourseManagement = () => {
   // Delete a course
   const deleteCourse = async (courseId) => {
     try {
-      await api.delete(`/Course/delete-course/${courseId}`);
+      await api.delete(`/Course/delete-course?id=${courseId}`);
       const updatedCourses = getAllCourses.filter(
         (course) => course.courseId !== courseId
       );
@@ -137,6 +137,7 @@ const CourseManagement = () => {
       notification.success({
         message: "Course added successfully",
       });
+      fetchAllCourses();
       setIsModalOpen(false);
       form.resetFields();
       setImageUrl(""); // Reset image URL after adding course
@@ -186,7 +187,7 @@ const CourseManagement = () => {
       console.log("check" + newLesson.courseId);
       await api.post("/Lesson", newLesson); // Call API to add lesson
       notification.success({ message: "Lesson added successfully" });
-
+      // Update the lessons list
       // Close the modal and reset values
       setIsModalLessonOpen(false);
       form.resetFields(); // Reset form fields

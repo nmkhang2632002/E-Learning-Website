@@ -25,7 +25,7 @@ export default function Sign() {
         localStorage.setItem("accessToken", data.accessTokenToken);
         const user = jwtDecode(data.accessTokenToken);
         dispatch(doLoginAction(user));
-        if (user.role === "admin" || user.role === "instructor") {
+        if (user.Role === "admin" || user.Role === "instructor") {
           navigate("/admin");
           toast.success("Login Success");
         } else {

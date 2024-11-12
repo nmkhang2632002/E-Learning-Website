@@ -13,10 +13,10 @@ import {
   Button,
   Popconfirm,
 } from "antd";
-import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { Link, Navigate, NavLink, Outlet, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import { doLogoutAction, useAccount } from "../../../redux/slice/accountSlice";
-import CreditScoreIcon from '@mui/icons-material/CreditScore';
+import CreditScoreIcon from "@mui/icons-material/CreditScore";
 const { Content, Sider } = Layout;
 
 const Admin = () => {
@@ -24,15 +24,23 @@ const Admin = () => {
   const navigate = useNavigate();
 
   const accountInfo = useAccount();
-
+  console.log(accountInfo);
+  if (!accountInfo.isAuthenticated) {
+    return <Navigate to="/signin" />;
+  }
+  if (
+    accountInfo.user.Role !== "admin" &&
+    accountInfo.user.Role !== "instructor"
+  ) {
+    return <Navigate to="/" />;
+  }
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
   // Function xử lý thoát đăng nhập
   const handleLogOut = () => {
-    console.log("Button Logout clicked");
-    // localStorage.removeItem('access_token');
+    localStorage.removeItem("accessToken");
     dispatch(doLogoutAction());
     navigate("/");
   };
@@ -110,10 +118,7 @@ const Admin = () => {
             </Link>
           </Menu.Item>
           <Menu.Item key="4" icon={<CreditScoreIcon />}>
-            <Link
-              style={{ textDecoration: "none" }}
-              to="/admin/admin_payment"
-            >
+            <Link style={{ textDecoration: "none" }} to="/admin/admin_payment">
               Payment
             </Link>
           </Menu.Item>
