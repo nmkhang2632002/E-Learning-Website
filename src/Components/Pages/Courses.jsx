@@ -5,7 +5,6 @@ import { useAccount } from "../../redux/slice/accountSlice";
 
 export default function Cources() {
   const [mernCourses, setMernCourses] = useState([]);
-  const [programingCourses, setProgramingCourses] = useState([]);
   const { user } = useAccount();
   const getAllCourse = async () => {
     try {
@@ -42,7 +41,6 @@ export default function Cources() {
   };
   useEffect(() => {
     getAllCourse();
-    setProgramingCourses(JSON.parse(localStorage.getItem("ProgramingCourses")));
   }, []);
 
   return (
