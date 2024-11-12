@@ -20,7 +20,9 @@ const PaymentSuccess = () => {
     );
     if (response.data) {
       localStorage.removeItem("courseId");
-      navigate(`/courses/${courseId}/lesson`);
+      setTimeout(() => {
+        navigate(`/courses/${courseId}/lesson`);
+      }, 1000);
     }
   };
 
