@@ -1,190 +1,207 @@
-import React, { useState } from 'react';
-import Navbar from './Navbar';
-import Footer from './Footer';
-import { Button, Form, Input, notification, DatePicker, Select } from 'antd';
-import { LockOutlined, UserOutlined, MailOutlined, LoadingOutlined, CheckOutlined, PhoneOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
-import dayjs from 'dayjs';
+import React, { useState } from "react";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+import { Button, Form, Input, notification, DatePicker, Select } from "antd";
+import {
+  LockOutlined,
+  UserOutlined,
+  MailOutlined,
+  LoadingOutlined,
+  CheckOutlined,
+  PhoneOutlined,
+  IdcardOutlined,
+} from "@ant-design/icons";
+import { useNavigate } from "react-router-dom";
+import dayjs from "dayjs";
+import api from "../../utils/axios-custom";
 
 export default function Register() {
-    const [form] = Form.useForm();
-    const navigate = useNavigate();
+  const [form] = Form.useForm();
+  const navigate = useNavigate();
 
-    // useState
-    const [isLoading, SetIsLoading] = useState(true);
+  // useState
+  const [isLoading, SetIsLoading] = useState(true);
 
-    // API SignUp Function
-    const onFinish = async (values) => {
-        const { username, email, password, role, phoneNumber, dateOfBirth } = values;
+  // API SignUp Function
+  const onFinish = async (values) => {
+    const { fullName, email, password, role, phoneNumber } = values;
 
-        try {
-            // Retrieve existing accounts from localStorage
-            const storedAccounts = localStorage.getItem('Accounts');
-            const accounts = storedAccounts ? JSON.parse(storedAccounts) : [];
+    try {
+      const key = "updatable"; // A key to close the notification later
+      notification.open({
+        key,
+        message: "Please Hold",
+        description: "Sign-up in progress...",
+        icon: <LoadingOutlined />,
+        duration: 0, // Keep it open until updated
+      });
+      const res = await api.post("/User", {
+        fullName,
+        email,
+        password,
+        role,
+        phoneNumber,
+      });
 
-            // Create a new user account object
-            const newAccount = {
-                _id: { $oid: new Date().getTime().toString() }, // Generating a simple unique ID
-                username,
-                email,
-                password,
-                role,
-                phoneNumber,
-                dateOfBirth: dayjs(dateOfBirth).format('YYYY-MM-DD'), // Format date to string
-                __v: 0, // Default version
-                isAuthenticated: true, // Default isAuthenticated
-            };
+      // Simulate delay for signup process (optional)
+      setTimeout(() => {
+        // Update the notification with success status
+        notification.open({
+          key,
+          message: "Success",
+          description: "Sign-up completed successfully!",
+          icon: <CheckOutlined style={{ color: "#52c41a" }} />,
+        });
 
-            // Add the new account to the accounts array
-            accounts.push(newAccount);
+        // Navigate to the login page
+        navigate("/signin");
+      }, 3000);
+    } catch (error) {
+      console.error("Sign-up failed: ", error);
+      notification.error({
+        message: "Failed Sign Up",
+        description: "Something went wrong",
+      });
+    } finally {
+      SetIsLoading(false);
+    }
+  };
 
-            // Save updated accounts array to localStorage
-            localStorage.setItem('Accounts', JSON.stringify(accounts));
+  const validatePassword = ({ getFieldValue }) => ({
+    validator(_, value) {
+      if (!value || getFieldValue("password") === value) {
+        return Promise.resolve();
+      }
+      return Promise.reject(
+        new Error("The two passwords that you entered do not match!")
+      );
+    },
+  });
 
-            // Display loading notification
-            const key = 'updatable'; // A key to close the notification later
-            notification.open({
-                key,
-                message: 'Please Hold',
-                description: 'Sign-up in progress...',
-                icon: <LoadingOutlined />,
-                duration: 0, // Keep it open until updated
-            });
+  return (
+    <>
+      <Navbar />
+      <div className="m-5" style={{ minHeight: "70vh" }}>
+        <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
+          <h6 className="section-title bg-white text-center text-primary px-3">
+            Sign Up Page
+          </h6>
+          <h1 className="mb-5">User Register Page</h1>
+        </div>
+        <div
+          className="singin container"
+          style={{
+            height: "50vh",
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          {/* Form Register */}
+          <Form
+            form={form}
+            name="signup"
+            initialValues={{
+              remember: true,
+            }}
+            style={{
+              width: "100%",
+              maxWidth: "500px",
+            }}
+            onFinish={onFinish}
+            className="animated slideInLeft"
+          >
+            {/* Full Name */}
+            <Form.Item
+              name="fullName"
+              rules={[
+                { required: true, message: "Please input your Full Name!" },
+              ]}
+            >
+              <Input
+                prefix={<UserOutlined />}
+                placeholder="Full Name"
+                required
+              />
+            </Form.Item>
 
-            // Simulate delay for signup process (optional)
-            setTimeout(() => {
-                // Update the notification with success status
-                notification.open({
-                    key,
-                    message: 'Success',
-                    description: 'Sign-up completed successfully!',
-                    icon: <CheckOutlined style={{ color: '#52c41a' }} />,
-                });
+            {/* Phone Number */}
+            <Form.Item
+              name="phoneNumber"
+              rules={[
+                { required: true, message: "Please input your Phone Number!" },
+              ]}
+            >
+              <Input
+                prefix={<PhoneOutlined />}
+                placeholder="Phone Number"
+                required
+              />
+            </Form.Item>
 
-                // Navigate to the login page
-                navigate('/signin');
-            }, 3000);
+            {/* Email */}
+            <Form.Item
+              name="email"
+              rules={[{ required: true, message: "Please input your Email!" }]}
+            >
+              <Input prefix={<MailOutlined />} placeholder="Email" required />
+            </Form.Item>
 
-        } catch (error) {
-            console.error("Sign-up failed: ", error);
-            notification.error({
-                message: 'Failed Sign Up',
-                description: 'Something went wrong',
-            });
-        } finally {
-            SetIsLoading(false);
-        }
-    };
+            {/* Password */}
+            <Form.Item
+              name="password"
+              rules={[
+                { required: true, message: "Please input your Password!" },
+              ]}
+              hasFeedback
+            >
+              <Input.Password
+                prefix={<LockOutlined />}
+                type="password"
+                placeholder="Password"
+                required
+              />
+            </Form.Item>
 
-    // Validate Re-enter password
-    const validateRePassword = (rule, value, callback) => {
-        const { getFieldValue } = form;
+            {/* Confirm Password */}
+            <Form.Item
+              name="confirmPassword"
+              dependencies={["password"]}
+              hasFeedback
+              rules={[
+                { required: true, message: "Please confirm your Password!" },
+                validatePassword,
+              ]}
+            >
+              <Input.Password
+                prefix={<LockOutlined />}
+                type="password"
+                placeholder="Confirm Password"
+                required
+              />
+            </Form.Item>
 
-        if (value && value !== getFieldValue('password')) {
-            callback('Password does not match!');
-        } else {
-            callback();
-        }
-    };
+            {/* Role */}
+            <Form.Item
+              name="role"
+              rules={[{ required: true, message: "Please input your Role!" }]}
+            >
+              <Select placeholder="Select a role">
+                <Select.Option value="student">Student</Select.Option>
+                <Select.Option value="instructor">Instructor</Select.Option>
+                <Select.Option value="admin">Admin</Select.Option>
+              </Select>
+            </Form.Item>
 
-    return (
-        <>
-            <Navbar />
-            <div className="m-5" style={{ minHeight: "70vh" }}>
-                <div className="text-center wow fadeInUp" data-wow-delay="0.1s">
-                    <h6 className="section-title bg-white text-center text-primary px-3">Sign Up Page</h6>
-                    <h1 className="mb-5">User Register Page</h1>
-                </div>
-                <div className="singin container" style={{ height: "50vh", width: '100%', display: 'flex', justifyContent: "center" }}>
-
-                    {/* Form Register */}
-                    <Form
-                        form={form}
-                        name="signup"
-                        initialValues={{
-                            remember: true,
-                        }}
-                        style={{
-                            width: '100%',
-                            maxWidth: "500px",
-                        }}
-                        onFinish={onFinish}
-                        className='animated slideInLeft'
-                    >
-                        {/* Username */}
-                        <Form.Item
-                            name="username"
-                            rules={[{ required: true, message: 'Please input your Username!' }]}
-                        >
-                            <Input prefix={<UserOutlined />} placeholder="Username" required />
-                        </Form.Item>
-
-                        {/* Email */}
-                        <Form.Item
-                            name="email"
-                            rules={[{ required: true, message: 'Please input your Email!' }]}
-                        >
-                            <Input prefix={<MailOutlined />} placeholder="Email" required />
-                        </Form.Item>
-
-                        {/* Password */}
-                        <Form.Item
-                            name="password"
-                            rules={[{ required: true, message: 'Please input your Password!' }]}
-                        >
-                            <Input.Password prefix={<LockOutlined />} type="password" placeholder="Password" required />
-                        </Form.Item>
-
-                        {/* Re-enter Password */}
-                        <Form.Item
-                            name="re-password"
-                            rules={[
-                                { required: true, message: 'Please re-enter your Password!' },
-                                { validator: validateRePassword },
-                            ]}
-                        >
-                            <Input.Password prefix={<LockOutlined />} type="password" placeholder="Re-enter password" />
-                        </Form.Item>
-
-                        {/* Role */}
-                        <Form.Item
-                            name="role"
-                            rules={[{ required: true, message: 'Please select a role!' }]}
-                        >
-                            <Select placeholder="Select a role">
-                                <Select.Option value="student">Student</Select.Option>
-                                <Select.Option value="instructor">Instructor</Select.Option>
-                                <Select.Option value="admin">Admin</Select.Option>
-                            </Select>
-                        </Form.Item>
-
-                        {/* Phone Number */}
-                        <Form.Item
-                            name="phoneNumber"
-                            rules={[{ required: true, message: 'Please input your Phone Number!' }]}
-                        >
-                            <Input prefix={<PhoneOutlined />} placeholder="Phone Number" required />
-                        </Form.Item>
-
-                        {/* Date of Birth */}
-                        <Form.Item
-                            name="dateOfBirth"
-                            rules={[{ required: true, message: 'Please select your Date of Birth!' }]}
-                        >
-                            <DatePicker placeholder="Select Date of Birth" style={{ width: '100%' }} required />
-                        </Form.Item>
-
-                        {/* Submit Button */}
-                        <Form.Item>
-                            <Button block type="primary" htmlType="submit">
-                                Sign Up
-                            </Button>
-                        </Form.Item>
-                    </Form>
-                </div>
-
-            </div>
-            <Footer />
-        </>
-    );
+            <Form.Item>
+              <Button block type="primary" htmlType="submit">
+                Sign Up
+              </Button>
+            </Form.Item>
+          </Form>
+        </div>
+      </div>
+      <Footer />
+    </>
+  );
 }
