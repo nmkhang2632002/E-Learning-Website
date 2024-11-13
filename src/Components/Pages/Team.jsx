@@ -44,8 +44,8 @@ export default function Team() {
     <section className={styles.teamSection}>
       <div className={styles.container}>
         <div className={styles.header}>
-          <span className={styles.subtitle}>Instructors</span>
-          <h2 className={styles.title}>Expert Instructors</h2>
+          <span className={styles.subtitle}>Team Members</span>
+          <h2 className={styles.title}>Meet Our Team</h2>
         </div>
 
         <div className={styles.teamGrid}>
