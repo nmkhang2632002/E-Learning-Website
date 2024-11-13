@@ -60,7 +60,7 @@ export default function Contact() {
                 </div>
                 <div className="ms-3">
                   <h5 className="text-primary">Office</h5>
-                  <p className="mb-0">DSCET chennai,Tamil Nadu</p>
+                  <p className="mb-0">Quận 9, TP HCM</p>
                 </div>
               </div>
               <div className="d-flex align-items-center mb-3">
@@ -72,7 +72,7 @@ export default function Contact() {
                 </div>
                 <div className="ms-3">
                   <h5 className="text-primary">Mobile</h5>
-                  <p className="mb-0">+91 705 088 9705</p>
+                  <p className="mb-0">+091252783</p>
                 </div>
               </div>
               <div className="d-flex align-items-center">
@@ -84,7 +84,7 @@ export default function Contact() {
                 </div>
                 <div className="ms-3">
                   <h5 className="text-primary">Email</h5>
-                  <p className="mb-0">basantgoswami7050@gmail.com</p>
+                  <p className="mb-0">nhatnam2490@gamil.com</p>
                 </div>
               </div>
             </div>
@@ -94,15 +94,14 @@ export default function Contact() {
             >
               <iframe
                 className="position-relative rounded w-100 h-100"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4327.512444698837!2d80.17810250948644!3d12.620432297105136!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a53ab5250243c71%3A0xbb338ff75412f3f5!2sDhanalakshmi%20Srinivasan%20College%20of%20Engineering%20and%20Technology!5e0!3m2!1sen!2sin!4v1710127521636!5m2!1sen!2sin"
-                frameBorder={0}
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.609941530484!2d106.80730807451795!3d10.841132857997918!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752731176b07b1%3A0xb752b24b379bae5e!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBGUFQgVFAuIEhDTQ!5e0!3m2!1svi!2s!4v1731502122032!5m2!1svi!2s"
                 style={{ minHeight: "300px", border: 0 }}
                 allowFullScreen
                 aria-hidden="false"
                 tabIndex={0}
               />
             </div>
-            <div
+            {/* <div
               className="col-lg-4 col-md-12 wow fadeInUp"
               data-wow-delay="0.5s"
             >
@@ -185,7 +184,7 @@ export default function Contact() {
                 </div>
               </form>
               <span>{result}</span>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

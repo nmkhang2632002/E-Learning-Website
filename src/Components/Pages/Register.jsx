@@ -24,7 +24,7 @@ export default function Register() {
 
   // API SignUp Function
   const onFinish = async (values) => {
-    const { fullName, email, password, role, phoneNumber } = values;
+    const { fullName, email, password, phoneNumber } = values;
 
     try {
       const key = "updatable"; // A key to close the notification later
@@ -39,7 +39,7 @@ export default function Register() {
         fullName,
         email,
         password,
-        role,
+        role: "student",
         phoneNumber,
       });
 
@@ -179,18 +179,6 @@ export default function Register() {
                 placeholder="Confirm Password"
                 required
               />
-            </Form.Item>
-
-            {/* Role */}
-            <Form.Item
-              name="role"
-              rules={[{ required: true, message: "Please input your Role!" }]}
-            >
-              <Select placeholder="Select a role">
-                <Select.Option value="student">Student</Select.Option>
-                <Select.Option value="instructor">Instructor</Select.Option>
-                <Select.Option value="admin">Admin</Select.Option>
-              </Select>
             </Form.Item>
 
             <Form.Item>

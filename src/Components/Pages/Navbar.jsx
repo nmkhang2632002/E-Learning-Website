@@ -79,13 +79,13 @@ export default function Navbar() {
                 >
                   Testimonial
                 </NavLink>
-                <NavLink
+                {/* <NavLink
                   to="/feedback"
                   className="dropdown-item"
                   activeClassName="active"
                 >
                   Feedback
-                </NavLink>
+                </NavLink> */}
               </div>
             </div>
             <NavLink

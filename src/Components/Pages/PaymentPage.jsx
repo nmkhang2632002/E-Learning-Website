@@ -1,6 +1,5 @@
-import { Input, notification, Table, Typography, Tag } from "antd";
+import { Input, notification, Table, Typography, Modal } from "antd";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import styled from "styled-components";
 import api from "../../utils/axios-custom";
 
@@ -25,6 +24,8 @@ const PaymentPage = () => {
   const [payments, setPayments] = useState([]);
   const [filteredPayments, setFilteredPayments] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+  const [bankCode, setBankCode] = useState(null);
 
   useEffect(() => {
     const fetchPayments = async () => {
@@ -59,6 +60,23 @@ const PaymentPage = () => {
     }
   };
 
+  // Handle click on "Detail Payment" link
+  const onDetailClick = async (record) => {
+    try {
+      const response = await api.get(
+        `Payment/detail-payment?orderCode=${record}`
+      );
+      console.log(response.data);
+      setBankCode(response.data.data);
+      setOpenModal(true);
+    } catch (error) {
+      console.error("Error fetching payment details:", error);
+      notification.error({
+        message: "Error fetching payment details",
+        description: "Could not load payment details. Please try again later.",
+      });
+    }
+  };
   const columns = [
     {
       title: "Payment ID",
@@ -69,6 +87,11 @@ const PaymentPage = () => {
       title: "User ID",
       dataIndex: "userId",
       key: "userId",
+    },
+    {
+      title: "Full Name",
+      dataIndex: "userName",
+      key: "userName",
     },
     {
       title: "Amount",
@@ -86,6 +109,22 @@ const PaymentPage = () => {
       title: "Title",
       dataIndex: "title",
       key: "title",
+    },
+    {
+      title: "Detail Payment",
+      dataIndex: "bankCode",
+      key: "bankCode",
+      render: (record) => {
+        return (
+          <p
+            color="blue"
+            style={{ cursor: "pointer" }}
+            onClick={() => onDetailClick(record)}
+          >
+            Show details
+          </p>
+        );
+      },
     },
   ];
 
@@ -116,6 +155,37 @@ const PaymentPage = () => {
         dataSource={filteredPayments}
         rowKey={(record) => record.paymentId}
       />
+      {bankCode && (
+        <Modal
+          title="Payment Details"
+          visible={openModal}
+          onCancel={() => setOpenModal(false)}
+          footer={null}
+        >
+          <p>
+            <strong>ID:</strong> {bankCode.id}
+          </p>
+          <p>
+            <strong>Order Code:</strong> {bankCode.orderCode}
+          </p>
+          <p>
+            <strong>Amount:</strong> {bankCode.amount}
+          </p>
+          <p>
+            <strong>Amount Paid:</strong> {bankCode.amountPaid}
+          </p>
+          <p>
+            <strong>Amount Remaining:</strong> {bankCode.amountRemaining}
+          </p>
+          <p>
+            <strong>Status:</strong> {bankCode.status}
+          </p>
+          <p>
+            <strong>Created At:</strong>{" "}
+            {new Date(bankCode.createdAt).toLocaleString()}
+          </p>
+        </Modal>
+      )}
     </>
   );
 };
