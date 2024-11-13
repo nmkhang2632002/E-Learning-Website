@@ -36,7 +36,7 @@ export default function Team() {
       name: "Nguyen Huu Dang Truong",
       role: "Front-end Developer",
       image:
-        "https://res.cloudinary.com/dkyv1vp1c/image/upload/v1731503877/123187023_140203614476643_3939955748519357416_n.jpg_ocz5td.jpg",
+        "https://res.cloudinary.com/dkyv1vp1c/image/upload/v1731505902/peq6fctqaeiuzqn9z79n.png",
     },
   ];
 

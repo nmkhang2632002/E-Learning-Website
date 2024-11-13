@@ -180,12 +180,12 @@ const PaymentPage = () => {
               <strong>Amount:</strong> {bankCode.amount}
             </p>
           )}
-          {bankCode.amountPaid && (
+          {bankCode.amountPaid > 0 && (
             <p>
               <strong>Amount Paid:</strong> {bankCode.amountPaid}
             </p>
           )}
-          {bankCode.amountRemaining && (
+          {bankCode.amountRemaining > 0 && (
             <p>
               <strong>Amount Remaining:</strong> {bankCode.amountRemaining}
             </p>
