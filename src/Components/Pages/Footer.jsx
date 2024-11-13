@@ -108,7 +108,7 @@ export default function Footer() {
             </div>
             <div className="col-lg-3 col-md-6">
               <h4 className="text-white mb-3">Newsletter</h4>
-              <p>This website is a Final Year project of IT Department DSCET</p>
+              <p>This website is a start up project</p>
             </div>
           </div>
         </div>

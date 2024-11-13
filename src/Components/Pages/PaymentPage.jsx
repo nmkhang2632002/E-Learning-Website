@@ -2,6 +2,7 @@ import { Input, notification, Table, Typography, Modal } from "antd";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import api from "../../utils/axios-custom";
+import { formatNumberWithDots } from "../../utils/formatPrice";
 
 const { Title } = Typography;
 
@@ -97,7 +98,9 @@ const PaymentPage = () => {
       title: "Amount",
       dataIndex: "money",
       key: "money",
-      render: (amount) => `$${amount.toFixed(2)}`, // Format as currency
+      render: (amount) => {
+        return formatNumberWithDots(amount) + " VND";
+      }, // Format as currency
     },
     {
       title: "Date",
@@ -121,7 +124,7 @@ const PaymentPage = () => {
             style={{ cursor: "pointer" }}
             onClick={() => onDetailClick(record)}
           >
-            Show details
+            View Details
           </p>
         );
       },
