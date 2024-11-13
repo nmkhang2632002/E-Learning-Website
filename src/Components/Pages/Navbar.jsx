@@ -72,13 +72,13 @@ export default function Navbar() {
                 >
                   Our Team
                 </NavLink>
-                <NavLink
+                {/* <NavLink
                   to="/testimonial"
                   className="dropdown-item"
                   activeClassName="active"
                 >
                   Testimonial
-                </NavLink>
+                </NavLink> */}
                 {/* <NavLink
                   to="/feedback"
                   className="dropdown-item"
