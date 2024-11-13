@@ -32,7 +32,7 @@ const PaymentPage = () => {
     const fetchPayments = async () => {
       try {
         const response = await api.get("Payment/all-Payment");
-        setPayments(response.data);
+        setPayments(response.data.sort((a, b) => b.paymentId - a.paymentId));
         setFilteredPayments(response.data);
       } catch (error) {
         console.error("Error fetching payments:", error);
