@@ -165,28 +165,110 @@ const PaymentPage = () => {
           onCancel={() => setOpenModal(false)}
           footer={null}
         >
-          <p>
-            <strong>ID:</strong> {bankCode.id}
-          </p>
-          <p>
-            <strong>Order Code:</strong> {bankCode.orderCode}
-          </p>
-          <p>
-            <strong>Amount:</strong> {bankCode.amount}
-          </p>
-          <p>
-            <strong>Amount Paid:</strong> {bankCode.amountPaid}
-          </p>
-          <p>
-            <strong>Amount Remaining:</strong> {bankCode.amountRemaining}
-          </p>
-          <p>
-            <strong>Status:</strong> {bankCode.status}
-          </p>
-          <p>
-            <strong>Created At:</strong>{" "}
-            {new Date(bankCode.createdAt).toLocaleString()}
-          </p>
+          {bankCode.id && (
+            <p>
+              <strong>ID:</strong> {bankCode.id}
+            </p>
+          )}
+          {bankCode.orderCode && (
+            <p>
+              <strong>Order Code:</strong> {bankCode.orderCode}
+            </p>
+          )}
+          {bankCode.amount && (
+            <p>
+              <strong>Amount:</strong> {bankCode.amount}
+            </p>
+          )}
+          {bankCode.amountPaid && (
+            <p>
+              <strong>Amount Paid:</strong> {bankCode.amountPaid}
+            </p>
+          )}
+          {bankCode.amountRemaining && (
+            <p>
+              <strong>Amount Remaining:</strong> {bankCode.amountRemaining}
+            </p>
+          )}
+          {bankCode.status && (
+            <p>
+              <strong>Status:</strong> {bankCode.status}
+            </p>
+          )}
+          {bankCode.createdAt && (
+            <p>
+              <strong>Created At:</strong>{" "}
+              {new Date(bankCode.createdAt).toLocaleString()}
+            </p>
+          )}
+          {bankCode.transactions && bankCode.transactions.length > 0 && (
+            <div>
+              <h4>Transactions</h4>
+              {bankCode.transactions.map((transaction, index) => (
+                <div key={index}>
+                  {transaction.accountNumber && (
+                    <p>
+                      <strong>Account Number:</strong>{" "}
+                      {transaction.accountNumber}
+                    </p>
+                  )}
+                  {transaction.amount && (
+                    <p>
+                      <strong>Amount:</strong> {transaction.amount}
+                    </p>
+                  )}
+                  {transaction.counterAccountBankName && (
+                    <p>
+                      <strong>Counter Account Bank Name:</strong>{" "}
+                      {transaction.counterAccountBankName}
+                    </p>
+                  )}
+                  {transaction.counterAccountName && (
+                    <p>
+                      <strong>Counter Account Name:</strong>{" "}
+                      {transaction.counterAccountName}
+                    </p>
+                  )}
+                  {transaction.counterAccountNumber && (
+                    <p>
+                      <strong>Counter Account Number:</strong>{" "}
+                      {transaction.counterAccountNumber}
+                    </p>
+                  )}
+                  {transaction.description && (
+                    <p>
+                      <strong>Description:</strong> {transaction.description}
+                    </p>
+                  )}
+                  {transaction.reference && (
+                    <p>
+                      <strong>Reference:</strong> {transaction.reference}
+                    </p>
+                  )}
+                  {transaction.transactionDateTime && (
+                    <p>
+                      <strong>Transaction DateTime:</strong>{" "}
+                      {new Date(
+                        transaction.transactionDateTime
+                      ).toLocaleString()}
+                    </p>
+                  )}
+                  {transaction.virtualAccountName && (
+                    <p>
+                      <strong>Virtual Account Name:</strong>{" "}
+                      {transaction.virtualAccountName}
+                    </p>
+                  )}
+                  {transaction.virtualAccountNumber && (
+                    <p>
+                      <strong>Virtual Account Number:</strong>{" "}
+                      {transaction.virtualAccountNumber}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
         </Modal>
       )}
     </>
