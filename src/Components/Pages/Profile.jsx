@@ -50,7 +50,7 @@ export default function Profile() {
                           className="text-decoration-none"
                           to="/profile/paypal"
                         >
-                          Paypal
+                          Payment History
                         </Link>
                       </Menu.Item>
                     </Menu.SubMenu>
