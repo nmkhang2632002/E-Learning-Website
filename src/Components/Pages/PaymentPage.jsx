@@ -1,10 +1,20 @@
-import { Input, notification, Table, Typography, Modal } from "antd";
-import { useEffect, useState } from "react";
+import {
+  Input,
+  notification,
+  Table,
+  Typography,
+  Modal,
+  Spin,
+  Select,
+} from "antd";
+import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import api from "../../utils/axios-custom";
 import { formatNumberWithDots } from "../../utils/formatPrice";
+import { LoadingOutlined } from "@ant-design/icons";
 
 const { Title } = Typography;
+const { Option } = Select;
 
 // Custom Table Row Styling for alternating row colors
 const StyledTable = styled(Table)`
@@ -22,52 +32,62 @@ const StyledTable = styled(Table)`
 `;
 
 const PaymentPage = () => {
-  const [payments, setPayments] = useState([]);
   const [filteredPayments, setFilteredPayments] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
   const [openModal, setOpenModal] = useState(false);
   const [bankCode, setBankCode] = useState(null);
-
+  const [loading, setLoading] = useState(false);
+  const payment = useRef(null);
   useEffect(() => {
     const fetchPayments = async () => {
+      setLoading(true);
       try {
         const response = await api.get("Payment/all-Payment");
-        setPayments(response.data.sort((a, b) => b.paymentId - a.paymentId));
         setFilteredPayments(response.data);
+        payment.current = response.data;
       } catch (error) {
         console.error("Error fetching payments:", error);
         notification.error({
           message: "Error fetching payments",
           description: "Could not load payments. Please try again later.",
         });
+      } finally {
+        setLoading(false);
       }
     };
     fetchPayments();
   }, []);
 
-  // Handle search input change
-  const onSearch = (value) => {
-    setSearchQuery(value);
-    if (value === "") {
-      setFilteredPayments(payments); // Reset if search is cleared
-    } else {
-      const filtered = payments.filter(
-        (payment) =>
-          payment.userId.toLowerCase().includes(value.toLowerCase()) ||
-          payment.paymentId.toString().includes(value) ||
-          payment.title.toLowerCase().includes(value.toLowerCase())
-      );
-      setFilteredPayments(filtered);
+  const onSearch = (event) => {
+    const { value } = event.target;
+    if (!value) {
+      setFilteredPayments(payment.current);
+      return;
     }
+    const filtered = payment.current.filter(
+      (payment) =>
+        payment.paymentId.toString().includes(value.toLowerCase()) ||
+        payment.userId.toString().includes(value.toLowerCase()) ||
+        payment.title.toString().includes(value.toLowerCase())
+    );
+    setFilteredPayments(filtered);
   };
 
+  const onStatusFilter = (value) => {
+    if (!value) {
+      setFilteredPayments(payment.current);
+      return;
+    }
+    const filtered = payment.current.filter(
+      (payment) => payment.status === value
+    );
+    setFilteredPayments(filtered);
+  };
   // Handle click on "Detail Payment" link
   const onDetailClick = async (record) => {
     try {
       const response = await api.get(
         `Payment/detail-payment?orderCode=${record}`
       );
-      console.log(response.data);
       setBankCode(response.data.data);
       setOpenModal(true);
     } catch (error) {
@@ -78,6 +98,7 @@ const PaymentPage = () => {
       });
     }
   };
+
   const columns = [
     {
       title: "Payment ID",
@@ -88,6 +109,10 @@ const PaymentPage = () => {
       title: "User ID",
       dataIndex: "userId",
       key: "userId",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
     },
     {
       title: "Full Name",
@@ -131,26 +156,45 @@ const PaymentPage = () => {
     },
   ];
 
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh", // Full viewport height to center vertically
+        }}
+      >
+        <Spin indicator={<LoadingOutlined spin />} size="large" />
+      </div>
+    );
+  }
+
   return (
     <>
       <div>
         <Title level={2}>Payment List</Title>
       </div>
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginBottom: 20,
-        }}
-      >
+      <div className="search-filter-container">
         <Input.Search
+          className="search-input"
           placeholder="Search by User ID, Payment ID, or Title"
           allowClear
           enterButton="Search"
           size="large"
-          onSearch={onSearch}
+          onChange={onSearch}
         />
+        <Select
+          className="select-filter"
+          placeholder="Filter by Status"
+          allowClear
+          onChange={onStatusFilter}
+        >
+          <Option value="PENDING">PENDING</Option>
+          <Option value="PAID">PAID</Option>
+          <Option value="CANCELLED">CANCELLED</Option>
+        </Select>
       </div>
 
       <StyledTable
@@ -197,7 +241,7 @@ const PaymentPage = () => {
           )}
           {bankCode.createdAt && (
             <p>
-              <strong>Created At:</strong>{" "}
+              <strong>Created At:</strong>
               {new Date(bankCode.createdAt).toLocaleString()}
             </p>
           )}

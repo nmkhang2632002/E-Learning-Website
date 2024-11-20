@@ -23,7 +23,6 @@ const UserManagement = () => {
 
   // useState
   const [accounts, setAccounts] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
   const [filteredAccounts, setFilteredAccounts] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false); // Modal state
   const [newUser, setNewUser] = useState({
@@ -54,18 +53,15 @@ const UserManagement = () => {
   }, []);
 
   // Handle search input change
-  const onSearch = (value) => {
-    setSearchQuery(value);
-    if (value === "") {
-      setFilteredAccounts(accounts); // Reset if search is cleared
-    } else {
-      const filtered = accounts.filter(
-        (account) =>
-          account.fullName.toLowerCase().includes(value.toLowerCase()) ||
-          account.email.toLowerCase().includes(value.toLowerCase()) ||
-          account.phoneNumber.includes(value)
+  const onSearch = (event) => {
+    const value = event.target.value;
+    if (value) {
+      const filteredData = accounts.filter((account) =>
+        account.fullName.toLowerCase().includes(value.toLowerCase())
       );
-      setFilteredAccounts(filtered);
+      setFilteredAccounts(filteredData);
+    } else {
+      setFilteredAccounts(accounts);
     }
   };
 
@@ -130,11 +126,6 @@ const UserManagement = () => {
       });
     }
   };
-
-  // Handle page change
-  // const onPageChange = (page) => {
-  //     setCurrentPage(page);
-  // };
 
   const columns = [
     // {
@@ -225,7 +216,7 @@ const UserManagement = () => {
           enterButton="Search"
           size="large"
           style={{ margin: "20px 20px 20px 0", width: "33%" }}
-          onSearch={onSearch} // Call onSearch when user submits
+          onChange={onSearch} // Call onSearch when user submits
         />
 
         {/* Add User Button */}

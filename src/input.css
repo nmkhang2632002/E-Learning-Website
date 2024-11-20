@@ -21,3 +21,46 @@
 .service-item p{
     color: black;
 } */
+.search-filter-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.search-input {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.select-filter {
+  width: 200px;
+}
+
+.modal-content {
+  padding: 20px;
+}
+
+.modal-header {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.transaction-section {
+  margin-top: 20px;
+}
+
+.transaction-header {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.transaction-item {
+  margin-bottom: 10px;
+}

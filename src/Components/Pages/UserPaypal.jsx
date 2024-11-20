@@ -37,7 +37,7 @@ const UserPaypal = () => {
       );
 
       if (rest.data) {
-        setSelectedPaypal(rest.data.data.status);
+        setSelectedPaypal(rest.data.data);
       }
     } catch (error) {
       console.log(error);
@@ -89,7 +89,7 @@ const UserPaypal = () => {
                     handleStatus(paypal.bankCode);
                   }}
                 >
-                  Status
+                  Detail
                 </Button>
               </div>
             }
@@ -109,6 +109,12 @@ const UserPaypal = () => {
               <Descriptions.Item label="Title">
                 {paypal.title}
               </Descriptions.Item>
+              <Descriptions.Item label="Description">
+                {paypal.description}
+              </Descriptions.Item>
+              <Descriptions.Item label="Status">
+                {paypal.status}
+              </Descriptions.Item>
             </Descriptions>
           </Card>
         ))
@@ -121,11 +127,76 @@ const UserPaypal = () => {
         footer={null}
       >
         {selectedPaypal && (
-          <Descriptions column={1} bordered>
-            <Descriptions.Item label="Status">
-              {selectedPaypal}
-            </Descriptions.Item>
-          </Descriptions>
+          <div className="modal-content">
+            <div className="modal-header">Payment Details</div>
+            <Descriptions column={1} bordered>
+              <Descriptions.Item label="ID">
+                {selectedPaypal.id}
+              </Descriptions.Item>
+              <Descriptions.Item label="Order Code">
+                {selectedPaypal.orderCode}
+              </Descriptions.Item>
+              <Descriptions.Item label="Amount">
+                {selectedPaypal.amount}
+              </Descriptions.Item>
+              <Descriptions.Item label="Amount Paid">
+                {selectedPaypal.amountPaid}
+              </Descriptions.Item>
+              <Descriptions.Item label="Amount Remaining">
+                {selectedPaypal.amountRemaining}
+              </Descriptions.Item>
+              <Descriptions.Item label="Status">
+                {selectedPaypal.status}
+              </Descriptions.Item>
+              <Descriptions.Item label="Created At">
+                {dayjs(selectedPaypal.createdAt).format("YYYY-MM-DD HH:mm")}
+              </Descriptions.Item>
+            </Descriptions>
+            {selectedPaypal.transactions &&
+              selectedPaypal.transactions.length > 0 && (
+                <div className="transaction-section">
+                  <div className="transaction-header">Transactions</div>
+                  {selectedPaypal.transactions.map((transaction, index) => (
+                    <div key={index} className="transaction-item">
+                      <Descriptions column={1} bordered>
+                        <Descriptions.Item label="Account Number">
+                          {transaction.accountNumber}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Amount">
+                          {transaction.amount}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Counter Account Bank Name">
+                          {transaction.counterAccountBankName}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Counter Account Name">
+                          {transaction.counterAccountName}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Counter Account Number">
+                          {transaction.counterAccountNumber}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Description">
+                          {transaction.description}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Reference">
+                          {transaction.reference}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Transaction DateTime">
+                          {dayjs(transaction.transactionDateTime).format(
+                            "YYYY-MM-DD HH:mm"
+                          )}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Virtual Account Name">
+                          {transaction.virtualAccountName}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="Virtual Account Number">
+                          {transaction.virtualAccountNumber}
+                        </Descriptions.Item>
+                      </Descriptions>
+                    </div>
+                  ))}
+                </div>
+              )}
+          </div>
         )}
       </Modal>
     </div>

@@ -22,10 +22,9 @@ import api from "../../utils/axios-custom";
 const CourseManagement = () => {
   const { Search } = Input;
   const { Title } = Typography;
-
+  const { TextArea } = Input;
   // useState
   const [getAllCourses, setGetAllCourses] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false); // For controlling course modal visibility
   const [isLessonModalOpen, setIsLessonModalOpen] = useState(false); // For controlling lessons modal
@@ -57,19 +56,6 @@ const CourseManagement = () => {
     };
     fetchAllCourses();
   }, []);
-
-  // Handle search input change
-  const onSearch = (value) => {
-    setSearchQuery(value);
-    if (value === "") {
-      setFilteredCourses(getAllCourses); // Reset if search is cleared
-    } else {
-      const filtered = getAllCourses.filter((getAllCourses) =>
-        getAllCourses.name.toLowerCase().includes(value.toLowerCase())
-      );
-      setFilteredCourses(filtered);
-    }
-  };
 
   // Delete a course
   const deleteCourse = async (courseId) => {
@@ -184,7 +170,6 @@ const CourseManagement = () => {
         picture: uploadedImageUrl, // Use the uploaded image URL
       };
 
-      console.log("check" + newLesson.courseId);
       await api.post("/Lesson", newLesson); // Call API to add lesson
       notification.success({ message: "Lesson added successfully" });
       // Update the lessons list
@@ -203,6 +188,14 @@ const CourseManagement = () => {
     }
   };
 
+  const hanldelSearch = (e) => {
+    const searchValue = e.target.value;
+
+    const filteredData = getAllCourses.filter((course) =>
+      course.name.toLowerCase().includes(searchValue.toLowerCase())
+    );
+    setFilteredCourses(filteredData);
+  };
   // Fetch categories from API
   const fetchCategories = async () => {
     try {
@@ -313,7 +306,7 @@ const CourseManagement = () => {
           allowClear
           enterButton="Search"
           size="large"
-          onSearch={onSearch}
+          onChange={hanldelSearch}
           style={{ margin: "20px 20px 20px 0px", width: "33%" }}
         />
         <div>
@@ -411,9 +404,6 @@ const CourseManagement = () => {
           itemLayout="vertical"
           size="large"
           pagination={{
-            onChange: (page) => {
-              console.log(page);
-            },
             pageSize: 5,
           }}
           dataSource={lessons}
@@ -458,7 +448,7 @@ const CourseManagement = () => {
               },
             ]}
           >
-            <Input placeholder="Enter Detail" />
+            <TextArea rows={2} placeholder="Enter Detail" maxLength={6} />
           </Form.Item>
 
           <Form.Item label="Picture">
