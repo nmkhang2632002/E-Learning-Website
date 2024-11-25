@@ -448,7 +448,7 @@ const CourseManagement = () => {
               },
             ]}
           >
-            <TextArea rows={2} placeholder="Enter Detail" maxLength={6} />
+            <TextArea rows={2} placeholder="Enter Detail" />
           </Form.Item>
 
           <Form.Item label="Picture">
